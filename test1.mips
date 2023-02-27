@@ -1,4 +1,6 @@
 start:
-add r0 r0 1
+bdse d4 4       # branch to line if device set
+add r15 r15 1   # Increment r0
+ceil r16 r15    # store smallest int > r15 in r16
 yield
-j start
+jal start       # jump+store next line number in ra
