@@ -1,0 +1,4 @@
+alias AVin      d0 # In Vent
+alias AVout     d1 # Out Vent
+alias AVemerg   d2 # Out Vent Emergency Decompress to Vac
+alias GSRaum2   d3 # Gas Sensor Input
