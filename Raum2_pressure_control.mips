@@ -75,11 +75,13 @@ j ra
 UNDERT:
 s WH On SetOn
 s AC On SetOff
+s AC Open SetOff
 j ra
 
 OVERT:
 s WH On SetOff
 s AC On SetOn
+s AC Open SetOn
 j ra
 
 TARGETT:
