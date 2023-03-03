@@ -1,0 +1,21 @@
+alias Beacon    d0
+
+define PowerOn  6
+define OnCycle .33
+alias  Phase   r2
+alias  Off     r3
+alias  Count   r4
+alias  Active  r5
+
+INIT:
+div   Phase PowerOn OnCycle
+trunc Phase Phase 
+sub   Off Phase OnCycle
+
+MAIN:
+mod   Count  Count Phase
+slt   Active Count PowerOn 
+s     Beacon On    Active 
+add   Count  Count 1
+yield
+j MAIN
