@@ -2,6 +2,8 @@ alias AVin      d0 # In Vent drawing air from room
 alias AVout     d1 # Out Vent pushing air to room
 alias AVemerg   d2 # "In" Vent Emergency Decompress to Vac
 alias GSRaum2   d3 # Gas Sensor Input
+alias WH        d4 # Wall heater
+alias AC        d5
 alias pIn       r0
 alias pOut      r1
 alias pEmerg    r2
@@ -10,48 +12,77 @@ alias SetOff    r4
 alias pNow      r5
 alias SetOut    r6
 alias SetIn     r7
+alias Tmin      r8
+alias Ttgt      r9
+alias Tmax      r10
+alias Tnow      r11
 
 add SetOn  0 1
 add SetOff 0 0
 add SetIn  0 1
 add SetOut 0 0
-add pIn    0 53   # draw air if p > pIn
-add pOut   0 50   # push air if p < pOut
+add pIn    0 103   # draw air if p > pIn
+add pOut   0 100   # push air if p < pOut
 add pEmerg 0 140  # max p, call emerg if reached
+add Tmin   273 21 # min Temp 21 °C
+add Ttgt   273 23 # Target Temp 23 °C
+add Tmax   273 25 # max Temp 25 °C
 
 INIT:
 s AVin Mode SetIn
 s AVin Lock SetOff
-s AVin PressureExternal 50
+s AVin PressureExternal 100
 s AVout Mode SetOut
 s AVout Lock SetOff
-s AVout PressureExternal 53
+s AVout PressureExternal 103
 s AVemerg Mode SetOut
 s AVemerg Lock SetOff
+s WH Lock SetOff
+s AC Lock SetOff
 
 MAIN: 
 l pNow GSRaum2 Pressure
 yield
-s db Setting pNow 
+l Tnow GSRaum2 Temperature
+yield
+s db Setting Tnow 
 bgt pNow pEmerg EMERG
 blt pNow pOut UNDERP
 bgt pNow pIn OVERP
+blt Tnow Tmin UNDERT
+bgt Tnow Tmax OVERT
+bgt Tnow Ttgt TARGETT
 s AVin On SetOn
-j MAIN
+j INIT
 
 UNDERP:
 s AVout On SetOn
 s AVin On SetOff
 s AVemerg On SetOff
-j MAIN
+j ra
 
 OVERP:
 s AVout On SetOff
 s AVin On SetOn
 s AVemerg On SetOff
-j MAIN
+j ra
 
 EMERG:
 s AVout On SetOff   # closing outlet vent makes sense
 s AVemerg On SetOn # open emergency vent
-j MAIN
+j ra
+
+UNDERT:
+s WH On SetOn
+s AC On SetOff
+j ra
+
+OVERT:
+s WH On SetOff
+s AC On SetOn
+j ra
+
+TARGETT:
+s WH On SetOff
+s AC On SetOff
+j ra
