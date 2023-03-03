@@ -1,7 +1,7 @@
 alias Beacon    d0
 
-define PowerOn  4 # 0.5s ticks in powered up state
-define OnCycle .33
+define PowerOn  6 # 0.5s ticks in powered up state
+define OnCycle .5
 
 alias  Phase   r2
 alias  Off     r3
@@ -11,13 +11,13 @@ alias  Active  r5
 INIT:
 div   Phase PowerOn OnCycle
 trunc Phase Phase 
-sub   Off Phase OnCycle
+sub   Off Phase PowerOn
 
 MAIN:
-mod   Count  Count Phase
-slt   Active Count PowerOn 
-s     Beacon On    Active
-s     db     Phase 
-add   Count  Count 1
+mod   Count  Count   Phase
+slt   Active Count   PowerOn 
+s     Beacon On      Active
+s     db     Setting Phase 
+add   Count  Count   1
 yield
 j MAIN
