@@ -1,0 +1,27 @@
+alias LiquidHeater   d0
+alias LiquidAnalyzer d1
+
+alias TCurrent r0
+alias TMax     r1 
+alias TMin     r2
+
+INIT:
+s LiquidHeater Lock 1
+add TMax 273 8
+add TMin 273 7
+
+MAIN:
+l TCurrent LiquidAnalyzer Temperature
+yield
+bgt TCurrent TMax OVERTEMP
+blt TCurrent TMin UNDERTEMP
+yield
+j MAIN
+
+UNDERTEMP:
+s LiquidHeater On 1
+j MAIN
+
+OVERTEMP:
+s LiquidHeater On 0
+j MAIN
