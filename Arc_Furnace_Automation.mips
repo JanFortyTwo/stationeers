@@ -10,22 +10,14 @@ alias Idle        r2
 INIT:
 s ArcFurnace Power 1
 add StackLimit 0 50
-# s AVin Lock SetOff
-# s AVin PressureExternal 100
-# s AVout Mode SetOut
-# s AVout Lock SetOff
-# s AVout PressureExternal 103
-# s AVemerg Mode SetOut
-# s AVemerg Lock SetOff
-# s WH Lock SetOff
-# s AC Lock SetOff
+
 
 MAIN: 
 l Idle ArcFurnace Idle
 yield
 l ImportCount ArcFurnace ImportCount
 yield
-bgt ImportCount StackLimit ACTIVATE:
+beq ImportCount StackLimit ACTIVATE
 beq Idle 1 IDLE
 j MAIN
 
