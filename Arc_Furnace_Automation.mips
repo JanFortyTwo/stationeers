@@ -1,29 +1,31 @@
 # Arc Furnace Automatio
-
 alias ArcFurnace  d0 
-alias StackLimit  r0
-alias ImportCount r1
-alias Idle        r2
-
-
+alias SL          r0
+alias InputFlag   r1
+alias Idling      r2
+alias ActiveFlag  r3
 
 INIT:
-s ArcFurnace Power 1
-add StackLimit 0 50
-
+add SL 0 50
 
 MAIN: 
-l Idle ArcFurnace Idle
+l Idling ArcFurnace Idle
 yield
-l ImportCount ArcFurnace ImportCount
+ls InputFlag ArcFurnace 0 Occupied
+s db Setting InputFlag
 yield
-beq ImportCount StackLimit ACTIVATE
-beq Idle 1 IDLE
+l ActiveFlag ArcFurnace Activate
+yield
+beq ActiveFlag 1 MAIN    # already active
+beq InputFlag 1 ACTIVATE
+#beq Idling 1 IDLE
 j MAIN
 
-IDLE:
-s ArcFurnace On 0
+# IDLE:
+# s ArcFurnace On 0
+# j MAIN
 
 ACTIVATE:
 s ArcFurnace On 1
 s ArcFurnace Activate 1
+j MAIN
