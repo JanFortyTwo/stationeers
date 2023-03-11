@@ -1,0 +1,70 @@
+# Controls Fuel 
+# - Filter
+# - Tank Temperature
+# - Canister Filler
+# - Overpressure Relief tbd
+
+alias FuelAnalyzer      d0
+alias FuelMixer         d1
+alias FuelCanisterPR    d2
+alias FuelHeater        d3
+alias GasMixAnalyzer    d4
+alias CanisterAnalyzer  d5
+
+alias Tnow               r0
+alias pNow               r1
+alias Tmax               r2
+alias Tmin               r3
+alias pMin               r4
+alias pMax               r5
+alias FuelTotalMoles     r6
+alias pEmerg             r7
+alias GMRatioFuel        r8
+alias GMTotalMoles       r9
+alias GMFuelMoles       r10
+#alias TotalGM           r11
+alias pCanister         r12
+alias OnOff             r13
+alias pCanisterMax      r14
+
+INIT:
+add Tmax         273 10
+add Tmin         273 5
+add pMin         0   2000
+add pMax         0   3000
+add pCanisterMax 0   2000
+
+MAIN:
+#s GasMixAnalyzer   On 1
+s FuelAnalyzer     On 1
+s CanisterAnalyzer On 1
+s FuelAnalyzer     Lock 1
+s CanisterAnalyzer Lock 1
+l Tnow             FuelAnalyzer   Temperature
+l pNow             FuelAnalyzer   Pressure
+l FuelTotalMoles FuelAnalyzer   TotalMoles
+# l GMRatioFuel    GasMixAnalyzer   RatioFuel
+# l GMTotalMoles     GasMixAnalyzer   TotalMoles
+l pCanister        CanisterAnalyzer Pressure
+#mul GMFuelMoles GMRatioFuel GMTotalMoles
+yield
+#s db Setting pCanister
+sgt OnOff pCanisterMax pCanister
+s FuelCanisterPR On OnOff
+sgt OnOff Tnow Tmax 
+slt OnOff Tnow Tmin
+s FuelHeater On OnOff
+# blt GMFuelMoles 1000 ENDFILTER
+# slt OnOff pNow 2000
+# s FuelFilter On OnOff
+
+j MAIN
+
+OVERP:
+j MAIN
+
+# ENDFILTER:
+# s FuelFilter On 0
+# j MAIN
+
+

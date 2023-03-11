@@ -1,0 +1,71 @@
+# Controls Volatiles 
+# - Filter
+# - Tank Temperature tbd
+# - Canister Filler tbd 
+# - Overpressure Relief tbd
+
+alias VolatilesAnalyzer   d0
+alias VolatilesFilter     d1
+alias VolatilesCanisterPR d2 #tbd
+alias VolatilesHeater     d3 
+alias GasMixAnalyzer      d4
+alias CanisterAnalyzer    d5 #tbd
+
+alias Tnow                r0
+alias pNow                r1
+alias Tmax                r2
+alias pMin                r4
+alias pMax                r5
+alias VolatilesTotalMoles r6
+alias pEmerg              r7
+alias GMRatioVolatiles    r8
+alias GMTotalMoles        r9
+alias GMVolatilesMoles    r10
+alias Tmin                r11
+alias pCanister           r12
+alias OnOff               r13
+alias pCanisterMax        r14
+
+INIT:
+add pMin         0   2000
+add pMax         0   6000
+add pCanisterMax 0   3000
+add Tmin         273   1
+add Tmax         273   20
+s VolatilesAnalyzer On 1
+s VolatilesAnalyzer Lock 1
+s GasMixAnalyzer    On 1
+s GasMixAnalyzer    Lock 1
+
+MAIN:
+s GasMixAnalyzer     On 1
+s VolatilesAnalyzer   On 1
+# s CanisterAnalyzer  On 1
+l Tnow           VolatilesAnalyzer   Temperature
+l pNow           VolatilesAnalyzer   Pressure
+l VolatilesTotalMoles VolatilesAnalyzer TotalMoles
+l GMRatioVolatiles  GasMixAnalyzer  RatioVolatiles
+l GMTotalMoles   GasMixAnalyzer   TotalMoles
+#l pCanister         CanisterAnalyzer Pressure
+mul GMVolatilesMoles  GMRatioVolatiles GMTotalMoles
+yield
+s db Setting pNow
+# sgt OnOff pCanisterMax pCanister
+# s VolatilesCanisterPR On OnOff
+sgt OnOff Tnow Tmax 
+slt OnOff Tnow Tmin
+s VolatilesHeater On OnOff
+blt GMVolatilesMoles 1000 ENDFILTER
+slt OnOff pNow 8000
+s VolatilesFilter On OnOff
+j MAIN
+
+OVERP:
+j MAIN
+
+ENDFILTER:
+s VolatilesFilter On 0
+j MAIN
+
+ACTIVATECANISTERPR:
+

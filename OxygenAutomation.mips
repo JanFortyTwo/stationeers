@@ -1,0 +1,69 @@
+# Controls Oxygen 
+# - Filter
+# - Tank Temperature
+# - Canister Filler
+# - Overpressure Relief tbd
+
+alias OxygenAnalyzer    d0
+alias OxygenFilter      d1
+alias OxygenCanisterPR  d2
+alias OxygenHeater      d3
+alias GasMixAnalyzer    d4
+alias CanisterAnalyzer  d5
+
+alias Tnow               r0
+alias pNow               r1
+alias Tmax               r2
+alias Tmin               r3
+alias pMin               r4
+alias pMax               r5
+alias OxygenTotalMoles   r6
+alias pEmerg             r7
+alias GMRatioOxygen      r8
+alias GMTotalMoles       r9
+alias GMOxygenMoles      r10
+#alias TotalGM           r11
+alias pCanister         r12
+alias OnOff             r13
+alias pCanisterMax      r14
+
+INIT:
+add Tmax         273 5
+add Tmin         273 0
+add pMin         0   4000
+add pMax         0   6000
+add pCanisterMax 0   15000
+
+MAIN:
+s GasMixAnalyzer   On 1
+s OxygenAnalyzer   On 1
+s CanisterAnalyzer On 1
+l Tnow             OxygenAnalyzer   Temperature
+l pNow             OxygenAnalyzer   Pressure
+l OxygenTotalMoles OxygenAnalyzer   TotalMoles
+l GMRatioOxygen    GasMixAnalyzer   RatioOxygen
+l GMTotalMoles     GasMixAnalyzer   TotalMoles
+l pCanister        CanisterAnalyzer Pressure
+mul GMOxygenMoles GMRatioOxygen GMTotalMoles
+yield
+s db Setting pCanister
+sgt OnOff pCanisterMax pCanister
+s OxygenCanisterPR On OnOff
+sgt OnOff Tnow Tmax 
+slt OnOff Tnow Tmin
+s OxygenHeater On OnOff
+blt GMOxygenMoles 1000 ENDFILTER
+slt OnOff pNow 3000
+s OxygenFilter On OnOff
+
+j MAIN
+
+OVERP:
+j MAIN
+
+ENDFILTER:
+s OxygenFilter On 0
+j MAIN
+
+ACTIVATECANISTERPR:
+

@@ -1,0 +1,47 @@
+# Fuel Mixing 
+# based on StanBernieStan workshop script
+alias VolAnalyzer    d0
+alias OxygenAnalyzer d1
+alias FuelMixer      d2
+alias FuelAnalyzer   d3 
+
+alias MolesHydrogen       r0
+alias MolesOxygen         r1
+alias Input1MixPercent    r2
+alias pMax                r4
+alias pNow                r5
+alias SourceMolesMin      r6
+
+
+INIT:
+s VolAnalyzer On 1
+s OxygenAnalyzer On 1
+s FuelAnalyzer On 1
+s VolAnalyzer Lock 1
+s OxygenAnalyzer Lock 1
+s FuelMixer Lock 0
+s FuelAnalyzer Lock 1
+add pMax 0 2500
+add SourceMolesMin 0 2000
+
+MAIN:
+l MolesHydrogen VolAnalyzer TotalMoles
+l MolesOxygen OxygenAnalyzer TotalMoles
+l pNow FuelAnalyzer Pressure
+div Input1MixPercent MolesHydrogen MolesOxygen
+div Input1MixPercent Input1MixPercent 2
+add Input1MixPercent Input1MixPercent 1
+div Input1MixPercent 1 Input1MixPercent
+mul Input1MixPercent Input1MixPercent 100
+s FuelMixer Setting Input1MixPercent
+
+blt MolesOxygen SourceMolesMin ENDMIXER
+blt MolesHydrogen SourceMolesMin ENDMIXER
+bgt pNow pMax ENDMIXER
+s FuelMixer On 1
+yield
+j MAIN
+ENDMIXER:
+s FuelMixer On 0 
+yield
+j MAIN
