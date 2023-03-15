@@ -1,0 +1,17 @@
+alias Suit     db
+alias Helmet   d0
+alias Backpack d1
+
+alias CO2Ratio r0
+alias OnOff    r0
+
+INIT:
+move OnOff 0
+
+MAIN:
+l CO2Ratio db RatioCarbonDioxide
+sgt OnOff 0.02 CO2Ratio
+s Suit Filtration OnOff
+
+yield
+j MAIN

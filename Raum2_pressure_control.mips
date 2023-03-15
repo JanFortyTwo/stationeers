@@ -1,9 +1,11 @@
+# Pressure and Temperature Control Raum 2
+# 2 * Active Vent solution for pressure
 alias AVin      d0 # In Vent drawing air from room
 alias AVout     d1 # Out Vent pushing air to room
 alias AVemerg   d2 # "In" Vent Emergency Decompress to Vac
 alias GSRaum2   d3 # Gas Sensor Input
 alias WH        d4 # Wall heater
-alias AC        d5
+alias AC        d5 # Air Conditioning 
 alias pIn       r0
 alias pOut      r1
 alias pEmerg    r2
@@ -21,12 +23,12 @@ add SetOn  0 1
 add SetOff 0 0
 add SetIn  0 1
 add SetOut 0 0
-add pIn    0 103   # draw air if p > pIn
-add pOut   0 100   # push air if p < pOut
+add pIn    0 102   # draw air if p > pIn
+add pOut   0  99   # push air if p < pOut
 add pEmerg 0 140  # max p, call emerg if reached
-add Tmin   273 21 # min Temp 21 °C
-add Ttgt   273 23 # Target Temp 23 °C
-add Tmax   273 25 # max Temp 25 °C
+add Tmin   273.15 21 # min Temp 21 °C
+add Ttgt   273.15 23 # Target Temp 23 °C
+add Tmax   273.15 25 # max Temp 25 °C
 
 INIT:
 s AVin Mode SetIn
@@ -69,7 +71,7 @@ j ra
 
 EMERG:
 s AVout On SetOff   # closing outlet vent makes sense
-s AVemerg On SetOn # open emergency vent
+s AVemerg On SetOn  # open emergency vent
 j ra
 
 UNDERT:

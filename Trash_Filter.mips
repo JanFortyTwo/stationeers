@@ -1,0 +1,50 @@
+# Pollutant and Volatiles Filter Control
+alias FilterDevice  db
+alias Diode         d0
+
+alias PollutantRatio r0
+alias VolatilesRatio r1
+alias OnOff          r2
+alias Filter0Qty     r3
+alias Filter1Qty     r4
+alias Filter0Occ     r5
+alias Filter1Occ     r6
+alias DiodeValue     r7
+alias FilterCount    r8
+alias FilterTotQty   r9
+
+MAIN:
+s Diode On 0
+ls Filter0Occ FilterDevice 0 Occupied
+ls Filter1Occ FilterDevice 1 Occupied
+move FilterCount 0
+move FilterTotQty 0
+move DiodeValue 0
+l PollutantRatio FilterDevice RatioPollutantInput
+l VolatilesRatio FilterDevice RatioVolatilesInput
+max PollutantRatio PollutantRatio VolatilesRatio
+sgt OnOff PollutantRatio 0.001
+s FilterDevice On OnOff
+bnezal Filter0Occ FILTER0SET
+bnezal Filter1Occ FILTER1SET
+min Filter0Qty Filter0Qty Filter1Qty
+# sub Filter0Qty Filter0Qty 1
+# abs DiodeValue Filter0Qty
+blt Filter0Qty 10 WARNING
+s Diode Setting 1
+yield
+j MAIN
+
+FILTER0SET:
+ls Filter0Qty FilterDevice 0 Quantity
+j ra
+
+FILTER1SET:
+ls Filter1Qty FilterDevice 1 Quantity
+j ra
+
+WARNING:
+s Diode On 1
+s Diode Setting 0
+j MAIN
+

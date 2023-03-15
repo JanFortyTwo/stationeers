@@ -1,0 +1,14 @@
+- Room filter automation for unwanted gases
+  - Trash Done
+  - CO2
+  - Oxygen
+- Overpressure relief for all gas systems
+- Control of advanced furnace exhaust systems
+  - exhaust to gas bus when conditions ok
+  - exhaust to vent when critical
+- true molar gas mix
+  - fuel
+  - raum 1 atmosphere
+  - raum 2 atmosphere
+  - filter check (present, functional)
+- Automatic waste tank emptying
