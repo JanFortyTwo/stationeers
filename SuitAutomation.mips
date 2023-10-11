@@ -2,16 +2,36 @@ alias Suit     db
 alias Helmet   d0
 alias Backpack d1
 
-alias CO2Ratio r0
-alias OnOff    r0
+alias CO2Ratio       r0
+alias OnOff          r2
+alias PollutantRatio r3
+alias VolatilesRatio r4
+alias NitrogenRatio  r5
+alias HelmetOpen     r6
 
 INIT:
-move OnOff 0
 
 MAIN:
+move OnOff 0
 l CO2Ratio db RatioCarbonDioxide
-sgt OnOff 0.02 CO2Ratio
-s Suit Filtration OnOff
+l PollutantRatio db RatioPollutant
+l VolatilesRatio db RatioVolatiles
+l HelmetOpen Helmet Open 
 
-yield
+beqzal HelmetOpen HELMETCLOSE
+beqal HelmetOpen 1 HELMETOPEN
+sleep 3
 j MAIN
+
+HELMETOPEN:
+s Suit Filtration 0 
+s Suit AirRelease 0
+s Suit On 0
+j ra
+
+HELMETCLOSE:
+s Suit AirRelease 1
+s Suit On 1
+sgt OnOff  CO2Ratio 0.7
+s Suit Filtration OnOff
+j ra

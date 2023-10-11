@@ -23,7 +23,7 @@ add SetOn  0 1
 add SetOff 0 0
 add SetIn  0 1
 add SetOut 0 0
-add pIn    0 102   # draw air if p > pIn
+add pIn    0 101   # draw air if p > pIn
 add pOut   0  99   # push air if p < pOut
 add pEmerg 0 140  # max p, call emerg if reached
 add Tmin   273.15 21 # min Temp 21 °C
@@ -33,10 +33,10 @@ add Tmax   273.15 25 # max Temp 25 °C
 INIT:
 s AVin Mode SetIn
 s AVin Lock SetOff
-s AVin PressureExternal 100
+s AVin PressureExternal 97
 s AVout Mode SetOut
 s AVout Lock SetOff
-s AVout PressureExternal 103
+s AVout PressureExternal 105
 s AVemerg Mode SetOut
 s AVemerg Lock SetOff
 s WH Lock SetOff

@@ -1,7 +1,7 @@
 # Raum 1 Atmosphere Control
 #alias AVin      d0 # In Vent drawing air from room
 #alias AVout     d1 # Out Vent pushing air to room
-#alias AVemerg   d2 # "In" Vent Emergency Decompress to Vac
+alias O2Filt    d2 # O2 Filter
 alias GSRaum1   d3 # Gas Sensor Input
 alias WH        d4 # Wall heater
 alias AC        d5 # Air Conditioning
@@ -17,6 +17,7 @@ alias Tmin      r8
 alias Ttgt      r9
 alias Tmax      r10
 alias Tnow      r11
+alias O2Ratio   r12
 
 add SetOn  0 1
 add SetOff 0 0
@@ -45,33 +46,24 @@ MAIN:
 l pNow GSRaum1 Pressure
 yield
 l Tnow GSRaum1 Temperature
+l O2Ratio GSRaum1 RatioOxygen
 yield
 s db Setting Tnow 
+s O2Filt On 0
 # bgt pNow pEmerg EMERG
 # blt pNow pOut UNDERP
 # bgt pNow pIn OVERP
-blt Tnow Tmin UNDERT
-bgt Tnow Tmax OVERT
-bgt Tnow Ttgt TARGETT
+bltal Tnow Tmin UNDERT
+bgtal Tnow Tmax OVERT
+bgtal Tnow Ttgt TARGETT
+bgtal O2Ratio 0.03 O2HIGH
 # s AVin On SetOn
 j MAIN
 
-# UNDERP:
-# s AVout On SetOn
-# s AVin On SetOff
-# s AVemerg On SetOff
-# j ra
-
-# OVERP:
-# s AVout On SetOff
-# s AVin On SetOn
-# s AVemerg On SetOff
-# j ra
-
-# EMERG:
-# s AVout On SetOff   # closing outlet vent makes sense
-# s AVemerg On SetOn # open emergency vent
-# j ra
+O2HIGH:
+s O2Filt On 1
+sleep 2
+j ra
 
 UNDERT:
 s WH On SetOn

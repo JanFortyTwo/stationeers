@@ -1,0 +1,40 @@
+# Controls Exhaust e.g. from Furnaces 
+# - operates volume pumps
+#   - back to main gas bus if conditions met
+#   - venting to atmosphere if pressure is critical
+
+alias ExhaustTank    d0
+alias GasMixAnalyzer d1
+alias PumpToBus      d2
+alias PumpToVacuum   d3
+
+alias Tnow           r0
+alias pNow           r1
+alias GMp            r2
+alias OnOff          r3
+
+MAIN:
+move OnOff 0
+s PumpToBus On 0
+bdns ExhaustTank MAIN
+s GasMixAnalyzer   On 1
+s PumpToVacuum Setting 100
+s PumpToBus Setting 100
+l Tnow  ExhaustTank Temperature
+l pNow  ExhaustTank Pressure
+l GMp   GasMixAnalyzer   Pressure
+yield
+s db Setting Tnow
+sgt OnOff pNow 40000
+s PumpToVacuum On OnOff
+bgt GMp 20000 MAIN
+bgt Tnow 293 MAIN
+blt pNow 500 MAIN
+s PumpToBus On 1
+sleep 5
+j MAIN
+
+
+j MAIN
+
+

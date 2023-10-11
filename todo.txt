@@ -1,7 +1,7 @@
 - Room filter automation for unwanted gases
   - Trash Done
-  - CO2
-  - Oxygen
+  - CO2 Done
+  - Oxygen Done
 - Overpressure relief for all gas systems
 - Control of advanced furnace exhaust systems
   - exhaust to gas bus when conditions ok
@@ -9,6 +9,9 @@
 - true molar gas mix
   - fuel
   - raum 1 atmosphere
-  - raum 2 atmosphere
-  - filter check (present, functional)
-- Automatic waste tank emptying
+  - raum 2 atmosphere Done
+  - filter check (present, functional) Ongoing
+- Automatic waste tank emptying Done
+- Suit automation
+  - set on off for AC / ventilation based on helmet open / closed Done
+  - activate filtration based on 

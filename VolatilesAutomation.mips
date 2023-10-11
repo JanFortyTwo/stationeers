@@ -28,7 +28,7 @@ alias pCanisterMax        r14
 
 INIT:
 add pMin         0   2000
-add pMax         0   6000
+add pMax         0   20000
 add pCanisterMax 0   3000
 add Tmin         273   1
 add Tmax         273   20
@@ -56,7 +56,7 @@ sgt OnOff Tnow Tmax
 slt OnOff Tnow Tmin
 s VolatilesHeater On OnOff
 blt GMVolatilesMoles 1000 ENDFILTER
-slt OnOff pNow 8000
+slt OnOff pNow pMax
 s VolatilesFilter On OnOff
 j MAIN
 

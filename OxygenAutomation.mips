@@ -53,7 +53,7 @@ sgt OnOff Tnow Tmax
 slt OnOff Tnow Tmin
 s OxygenHeater On OnOff
 blt GMOxygenMoles 1000 ENDFILTER
-slt OnOff pNow 3000
+slt OnOff pNow 20000
 s OxygenFilter On OnOff
 
 j MAIN

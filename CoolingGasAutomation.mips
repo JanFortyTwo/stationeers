@@ -50,7 +50,7 @@ s db Setting pNow
 # sgt OnOff Tnow Tmax 
 # slt OnOff Tnow Tmin
 # s CoolingHeater On OnOff
-blt GMCoolingMoles 800 ENDFILTER
+blt GMCoolingMoles 200 ENDFILTER
 slt OnOff pNow 8000
 s CoolingFilter On OnOff
 

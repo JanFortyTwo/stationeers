@@ -1,0 +1,32 @@
+# Breathable Air Cooling Control
+# cools air to below room temp
+# to reduce AC usage
+
+alias AirTank       d0
+alias DValve1       d1
+alias DValve2       d2
+
+alias AirTankP             r0
+alias AirTankT             r1
+alias OnOff                r2
+
+MAIN:
+l AirTankP AirTank Pressure
+l AirTankT AirTank Temperature
+yield
+s db Setting AirTankT
+STARTTEMP:
+bgtal AirTankT 280.15 COOL
+bltal AirTankT 277.15 TEMPOK
+j MAIN
+
+COOL:
+s DValve1 On 1
+s DValve2 On 1
+j MAIN
+
+TEMPOK:
+s DValve1 On 0
+s DValve2 On 0
+j MAIN
+

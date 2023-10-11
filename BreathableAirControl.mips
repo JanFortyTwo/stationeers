@@ -1,0 +1,57 @@
+# Breathable Air Temperature and Mixture Control
+# heats air a little under room Temperature
+# and mixes Nitrogen and Oxygen in when available
+# Cooling done in other module
+# because of device limitations
+
+alias AirTank       d0
+alias NitrogenPump  d1
+alias OxygenPump    d2
+alias Nitrogentank  d3
+alias OxygenTank    d4
+alias AirHeater     d5
+
+alias AirTankP             r0
+alias AirTankT             r1
+alias AirTankNitrogenRatio r2
+alias AirTankOxygenRatio   r3
+alias NitrogenMoles        r4
+alias OxygenMoles          r5
+alias OnOff                r6
+
+MAIN:
+l AirTankP AirTank Pressure
+l AirTankT AirTank Temperature
+l AirTankNitrogenRatio AirTank RatioNitrogen
+l AirTankOxygenRatio AirTank RatioOxygen
+l NitrogenMoles Nitrogentank TotalMoles
+l OxygenMoles OxygenTank TotalMoles
+s NitrogenPump Setting 8
+s OxygenPump Setting 4
+yield
+s db Setting AirTankP
+bgt AirTankP 8000 ENDPRESSURE
+blt NitrogenMoles 1000 ENDPRESSURE
+blt OxygenMoles 1000 ENDPRESSURE
+slt OnOff AirTankNitrogenRatio .80
+s NitrogenPump On OnOff
+slt OnOff AirTankOxygenRatio .20
+s OxygenPump On OnOff
+STARTTEMP:
+bltal AirTankT 274.15 HEAT
+bgtal AirTankT 275.15 TEMPOK
+j MAIN
+
+HEAT:
+s AirHeater On 1
+j MAIN
+
+TEMPOK:
+s AirHeater On 0
+j MAIN
+
+ENDPRESSURE:
+s NitrogenPump On 0
+s OxygenPump On 0
+yield
+j STARTTEMP
