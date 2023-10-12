@@ -1,0 +1,42 @@
+# Controls Nitrogen 
+# - Filter
+# - Tank Temperature tbd
+# - Canister Filler tbd 
+# - Overpressure Relief tbd
+
+
+alias GasMixHeater       d3 
+alias GasMixAnalyzer     d4
+alias CanisterAnalyzer   d5 #tbd
+
+alias Tnow               r0
+alias pNow               r1
+alias Tmax               r2
+alias pMin               r4
+alias pMax               r5
+alias NitrogenTotalMoles r6
+alias pEmerg             r7
+alias GMRatioNitrogen    r8
+alias GMTotalMoles       r9
+alias Tmin               r11
+alias OnOff              r13
+
+INIT:
+
+add Tmin         273   1
+add Tmax         273   5
+
+MAIN:
+s GasMixAnalyzer     On 1
+# s CanisterAnalyzer  On 1
+l Tnow               GasMixAnalyzer   Temperature
+l pNow               GasMixAnalyzer   Pressure
+
+yield
+s db Setting Tnow
+# sgt OnOff pCanisterMax pCanister
+# s NitrogenCanisterPR On OnOff
+sgt OnOff Tnow Tmax 
+slt OnOff Tnow Tmin
+s GasMixHeater On OnOff
+j MAIN
