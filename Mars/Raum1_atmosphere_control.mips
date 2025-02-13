@@ -1,0 +1,89 @@
+# Raum 1 Atmosphere Control
+alias VPin      d0 # In Vent drawing air from room
+#alias AVout     d1 # Out Vent pushing air to room
+#alias O2Filt    d2 # O2 Filter
+alias GH1GS     d3 # Gas Sensor Input
+alias CGPA      d4 # Cooling Gas Pipe Analyzer
+alias AC        d5 # Air Conditioning
+alias pIn       r0
+alias pOut      r1
+alias pEmerg    r2
+alias SetOn     r3
+alias SetOff    r4
+alias pNow      r5
+alias SetOut    r6
+alias SetIn     r7
+alias Tmin      r8
+alias Ttgt      r9
+alias Tmax      r10
+alias Tnow      r11
+alias O2Ratio   r12
+
+add SetOn  0 1
+add SetOff 0 0
+add SetIn  0 1
+add SetOut 0 0
+add pIn    0 103   # draw air if p > pIn
+add pOut   0 100   # push air if p < pOut
+add pEmerg 0 140  # max p, call emerg if reached
+add Tmin   273 21 # min Temp 21 °C
+add Ttgt   273 23 # Target Temp 23 °C
+add Tmax   273 27 # max Temp 25 °C
+
+INIT:
+# s AVin Mode SetIn
+# s AVin Lock SetOff
+# s AVin PressureExternal 100
+# s AVout Mode SetOut
+# s AVout Lock SetOff
+# s AVout PressureExternal 103
+# s AVemerg Mode SetOut
+# s AVemerg Lock SetOff
+# s WH Lock SetOff
+s AC Lock SetOff
+# CHANGE THIS WHEN COOLING GAS TEMP IS CONSIDERED
+s CGPA On SetOff
+
+
+MAIN: 
+sleep 5
+l pNow GH1GS Pressure
+yield
+l Tnow GH1GS Temperature
+l O2Ratio GH1GS RatioOxygen
+yield
+s db Setting Tnow 
+#s O2Filt On 0
+# bgt pNow pEmerg EMERG
+# blt pNow pOut UNDERP
+# bgt pNow pIn OVERP
+#bltal Tnow Tmin UNDERT
+bgtal Tnow Tmax OVERT
+bgtal Tnow Ttgt TARGETT
+#bgtal O2Ratio 0.03 O2HIGH
+# s AVin On SetOn
+j MAIN
+
+#O2HIGH:
+#s O2Filt On 1
+#sleep 2
+#j ra
+
+UNDERT:
+#s WH On SetOn
+s AC On SetOff
+s AC Open SetOff
+j ra
+
+OVERT:
+#s WH On SetOff
+s VPin On SetOn
+s AC On SetOn
+s AC Open SetOn
+j MAIN
+
+TARGETT:
+#s WH On SetOff
+s AC On SetOff
+s VPin On SetOff
+j ra
