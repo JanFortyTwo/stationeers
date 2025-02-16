@@ -59,7 +59,7 @@ s db Setting Tnow
 # bgt pNow pIn OVERP
 #bltal Tnow Tmin UNDERT
 bgtal Tnow Tmax OVERT
-bgtal Tnow Ttgt TARGETT
+bltal Tnow Ttgt TARGETT
 #bgtal O2Ratio 0.03 O2HIGH
 # s AVin On SetOn
 j MAIN
@@ -86,4 +86,4 @@ TARGETT:
 #s WH On SetOff
 s AC On SetOff
 s VPin On SetOff
-j ra
+j MAIN
