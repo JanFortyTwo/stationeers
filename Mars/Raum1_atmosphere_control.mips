@@ -27,8 +27,8 @@ add pIn    0 103   # draw air if p > pIn
 add pOut   0 100   # push air if p < pOut
 add pEmerg 0 140  # max p, call emerg if reached
 add Tmin   273 21 # min Temp 21 °C
-add Ttgt   273 23 # Target Temp 23 °C
-add Tmax   273 27 # max Temp 25 °C
+add Ttgt   273 23 # Target Temp 24 °C
+add Tmax   273 27 # max Temp 26 °C
 
 INIT:
 # s AVin Mode SetIn

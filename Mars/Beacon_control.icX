@@ -15,17 +15,17 @@ div   Phase PowerOn OnCycle
 trunc Phase Phase 
 sub   Off Phase PowerOn
 
-SUN:
-s     Beacon On      0
-j MAIN
-
 MAIN:
-l     Sun    Beacon  SolarIrradiance 
-blt   Sun    1       SUN
+l     Sun    DSensor SolarIrradiance 
+bgt   Sun    0       DAY
 mod   Count  Count   Phase
 slt   Active Count   PowerOn 
 s     Beacon On      Active
 s     db     Setting Phase 
 add   Count  Count   1
 yield
+j MAIN
+
+DAY:
+s     Beacon On      0
 j MAIN

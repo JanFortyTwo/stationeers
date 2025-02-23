@@ -1,0 +1,24 @@
+#  activating filter and pump when conditions are good
+alias Tank    d0
+alias Filter  d1
+alias AV      d2
+alias GS      d3
+
+alias AmbientTemp      r1
+alias TankPress        r2
+alias OnOff            r3
+
+MAIN:
+yield
+l AmbientTemp GS     Temperature
+l TankPress   Tank   Pressure
+
+slt TankPress   TankPress   20000
+sgt AmbientTemp AmbientTemp 270
+and OnOff TankPress AmbientTemp
+s db Setting OnOff
+s Filter On    OnOff
+s AV     Mode  1  # inward
+s AV     On    OnOff
+
+j MAIN
