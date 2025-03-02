@@ -1,0 +1,6 @@
+define EPrinter 1307165496
+define EStacker -2020231820
+define EDial 554524804
+MAIN:
+yield
+lbn r1

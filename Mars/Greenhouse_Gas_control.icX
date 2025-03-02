@@ -1,0 +1,72 @@
+#  activating CO2Filter and pump when conditions are good
+define ActiveVent -842048328
+define TurboPump   1310794736
+define GS         -1252983604
+define Filtration -348054045
+
+alias Tank         d0
+alias CO2Filter    d1
+alias CO2AV        d2
+alias GSOutside    d3
+alias GSInside     d4
+alias ToxicsFilter d5
+
+alias AmbientTemp      r1
+alias TankPress        r2
+alias OnOff            r3
+alias TankCO2Ratio     r4
+alias TankTotalMoles   r5
+alias RatioPollu       r6
+alias RatioVola        r7
+alias RatioO2          r8
+alias PressureO2       r9
+alias PressureGH       r10
+
+MAIN:
+yield
+l AmbientTemp    GSOutside Temperature
+l TankPress      Tank      Pressure
+l TankCO2Ratio   Tank      RatioCarbonDioxide
+l RatioPollu     GSInside  RatioPollutant
+l RatioVola      GSInside  RatioVolatiles
+l RatioO2        Tank      RatioOxygen
+lbn PressureGH GS HASH("Greenhouse-Inside-GasSensor") Pressure 0
+s db Setting PressureGH
+#l PressureO2     
+#l TankTotalMoles Tank   Quantity
+
+slt TankPress   TankPress   1000
+sgt AmbientTemp AmbientTemp 274
+#slt TankCO2Ratio TankCO2Ratio 0.5
+and OnOff TankPress AmbientTemp
+
+s CO2Filter On    OnOff
+s CO2AV     Mode  1  # inward
+s CO2AV     On    OnOff
+
+min RatioVola RatioVola RatioPollu
+sgt OnOff RatioVola .0005
+s ToxicsFilter On OnOff
+sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
+#sbn Stacker HASH("Electronics Stacker") Setting r1
+
+slt OnOff RatioO2 .3
+sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") On OnOff
+sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") Setting 100
+
+slt OnOff PressureGH 90 
+s db Setting OnOff
+sbn ActiveVent HASH("Tank-To-Greenhouse-AV") Mode 0
+sbn ActiveVent HASH("Tank-To-Greenhouse-AV") On OnOff
+
+sgt OnOff PressureGH 110
+sbn ActiveVent HASH("Greenhouse-To-Tank-AV") Mode 1
+sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
+
+sgt OnOff RatioO2 0.33
+sbn Filtration HASH("Greenhouse-O2-Filter") On OnOff
+
+j MAIN
+
+
+#Greenhouse-O2-Pipe-Analyzer

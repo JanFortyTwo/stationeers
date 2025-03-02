@@ -1,0 +1,10 @@
+define Printer  1307165496
+define Stacker -2020231820
+define Dial     554524804
+
+MAIN:
+yield
+lbn r1 Dial HASH("Electronics Dial") Setting 2
+s db Setting r1
+sbn Stacker HASH("Electronics Stacker") Setting r1
+j MAIN
