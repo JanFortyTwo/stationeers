@@ -18,9 +18,10 @@ alias TankCO2Ratio     r4
 alias TankTotalMoles   r5
 alias RatioPollu       r6
 alias RatioVola        r7
-alias RatioO2          r8
+alias RatioO2Tank      r8
 alias PressureO2       r9
 alias PressureGH       r10
+alias RatioO2Inside    r11
 
 MAIN:
 yield
@@ -29,7 +30,8 @@ l TankPress      Tank      Pressure
 l TankCO2Ratio   Tank      RatioCarbonDioxide
 l RatioPollu     GSInside  RatioPollutant
 l RatioVola      GSInside  RatioVolatiles
-l RatioO2        Tank      RatioOxygen
+l RatioO2Tank    Tank      RatioOxygen
+l RatioO2Inside  GSInside  RatioOxygen
 lbn PressureGH GS HASH("Greenhouse-Inside-GasSensor") Pressure 0
 s db Setting PressureGH
 #l PressureO2     
@@ -50,7 +52,7 @@ s ToxicsFilter On OnOff
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
 #sbn Stacker HASH("Electronics Stacker") Setting r1
 
-slt OnOff RatioO2 .3
+slt OnOff RatioO2Tank .3
 sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") On OnOff
 sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") Setting 100
 
@@ -63,8 +65,9 @@ sgt OnOff PressureGH 110
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") Mode 1
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
 
-sgt OnOff RatioO2 0.33
+sgt OnOff RatioO2Inside 0.32
 sbn Filtration HASH("Greenhouse-O2-Filter") On OnOff
+
 
 j MAIN
 

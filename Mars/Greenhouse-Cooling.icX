@@ -9,10 +9,10 @@ s CoolingValve Lock 1
 MAIN:
 yield
 l Temp InsideGS Temperature
-sgt OnOff Temp 293
+sgt OnOff Temp 294
 s CoolingValve On OnOff
 j MAIN
-sgt OnOff Temp 290
+sgt OnOff Temp 294
 s CoolingValve On OnOff
 j MAIN
 
