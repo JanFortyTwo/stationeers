@@ -16,6 +16,7 @@ move OnOff 0
 l CO2Ratio db RatioCarbonDioxide
 l PollutantRatio db RatioPollutant
 l VolatilesRatio db RatioVolatiles
+l NitrogenRatio db RatioNitrogen
 l HelmetOpen Helmet Open 
 
 beqzal HelmetOpen HELMETCLOSE
@@ -33,5 +34,7 @@ HELMETCLOSE:
 s Suit AirRelease 1
 s Suit On 1
 sgt OnOff  CO2Ratio 0.6
+s Suit Filtration OnOff
+sgt OnOff NitrogenRatio 0.1
 s Suit Filtration OnOff
 j ra

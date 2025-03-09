@@ -11,27 +11,29 @@ alias GSOutside    d3
 alias GSInside     d4
 alias ToxicsFilter d5
 
-alias AmbientTemp      r1
-alias TankPress        r2
-alias OnOff            r3
-alias TankCO2Ratio     r4
-alias TankTotalMoles   r5
-alias RatioPollu       r6
-alias RatioVola        r7
-alias RatioO2Tank      r8
-alias PressureO2       r9
-alias PressureGH       r10
-alias RatioO2Inside    r11
+alias AmbientTemp       r1
+alias TankPress         r2
+alias OnOff             r3
+alias TankCO2Ratio      r4
+alias TankTotalMoles    r5
+alias RatioPollu        r6
+alias RatioVola         r7
+alias RatioO2Tank       r8
+alias PressureO2        r9
+alias PressureGH        r10
+alias RatioO2Inside     r11
+alias TankNitrogenRatio r12
 
 MAIN:
 yield
-l AmbientTemp    GSOutside Temperature
-l TankPress      Tank      Pressure
-l TankCO2Ratio   Tank      RatioCarbonDioxide
-l RatioPollu     GSInside  RatioPollutant
-l RatioVola      GSInside  RatioVolatiles
-l RatioO2Tank    Tank      RatioOxygen
-l RatioO2Inside  GSInside  RatioOxygen
+l AmbientTemp       GSOutside Temperature
+l TankPress         Tank      Pressure
+l TankCO2Ratio      Tank      RatioCarbonDioxide
+l RatioPollu        GSInside  RatioPollutant
+l RatioVola         GSInside  RatioVolatiles
+l RatioO2Tank       Tank      RatioOxygen
+l RatioO2Inside     GSInside  RatioOxygen
+l TankNitrogenRatio Tank      RatioNitrogen
 lbn PressureGH GS HASH("Greenhouse-Inside-GasSensor") Pressure 0
 s db Setting PressureGH
 #l PressureO2     
@@ -67,6 +69,9 @@ sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
 
 sgt OnOff RatioO2Inside 0.32
 sbn Filtration HASH("Greenhouse-O2-Filter") On OnOff
+
+slt OnOff TankNitrogenRatio 0.05
+sbn TurboPump HASH("Nitrogen-To-GreenhouseTank-TVP") On OnOff
 
 
 j MAIN

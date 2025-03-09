@@ -1,0 +1,43 @@
+alias Composter    d0
+alias AV           d1
+alias Filter       d2
+alias GS           d3
+alias Switch       d4
+
+alias OnOff        r0
+alias VolRatio     r1
+alias Press        r2
+
+
+MAIN:
+yield
+l VolRatio GS RatioVolatiles
+l Press GS Pressure
+l OnOff Switch Open
+
+s Composter On       1
+s Composter Activate OnOff
+bltal Press 30 VENTOFF
+bltal Press 50  FILTEROFF
+blt Press    130 MAIN
+bgtal VolRatio 0.35 FILTERON
+bltal Press 80  FILTEROFF
+
+bgt Press    145 VENTON
+j MAIN
+
+FILTERON:
+s Filter On 1
+j ra
+
+FILTEROFF:
+s Filter On 0
+j ra
+
+VENTON:
+s AV On 1
+j MAIN
+
+VENTOFF:
+s AV On 0
+j MAIN
