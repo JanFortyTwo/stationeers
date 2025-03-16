@@ -1,0 +1,36 @@
+alias Analyzer d0
+alias Purifier d1
+alias LED      d2
+
+alias OnOff    r0
+
+MAIN:
+yield
+l r1 Analyzer TotalMoles
+l r2 Analyzer RatioPollutedWater
+l r3 Analyzer VolumeOfLiquid
+l r4 Purifier Error 
+bgtz r4 ERROR
+blt r3 1 OFF
+mul r1 r1 r2
+bgt r1 5 ON
+blt r1 2 OFF
+j MAIN
+
+OFF:
+s Purifier On 0
+s LED On 0
+s LED Color 6
+j MAIN
+
+ON:
+s Purifier On 1
+s LED On 1
+s LED Color 2
+j MAIN
+
+ERROR:
+s Purifier On 0
+s LED On 1
+s LED Color 4
+j MAIN

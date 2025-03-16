@@ -1,0 +1,25 @@
+MAIN:
+yield
+l r0 d0 TotalMoles
+l r1 d0 RatioPollutedWater
+l r2 d1 Error
+mul r0 r0 r1
+bgt r0 5 ON
+blt r0 2 OFF
+bgtz r2 ERROR
+j MAIN
+OFF:
+s d1 On 0
+s d2 On 0
+s d2 Color 6
+j MAIN
+ON:
+s d1 On 1
+s d2 On 1
+s d2 Color 2
+j MAIN
+ERROR:
+s d1 On 0
+s d2 On 1
+s d2 Color 4
+j MAIN
