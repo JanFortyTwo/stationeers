@@ -1,0 +1,11 @@
+alias CoalCharcoalSorter d0
+define Charcoal HASH("ItemCharcoal")
+
+MAIN:
+yield
+s CoalCharcoalSorter Mode 1 # Any
+clr CoalCharcoalSorter # erase any stale instructions in RAM
+sll r0 Charcoal 8
+or r0 r0 SorterInstruction.FilterPrefabHashEquals
+put CoalCharcoalSorter 0 r0
+j MAIN

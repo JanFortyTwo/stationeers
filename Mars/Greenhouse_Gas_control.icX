@@ -1,8 +1,9 @@
 #  activating CO2Filter and pump when conditions are good
-define ActiveVent -842048328
-define TurboPump   1310794736
-define GS         -1252983604
-define Filtration -348054045
+define ActiveVent     -1129453144
+define TurboPump       1310794736
+define GS             -1252983604
+define Filtration     -348054045
+define DaylightSensor  1076425094
 
 alias Tank         d0
 alias CO2Filter    d1
@@ -23,6 +24,8 @@ alias PressureO2        r9
 alias PressureGH        r10
 alias RatioO2Inside     r11
 alias TankNitrogenRatio r12
+alias VerticalSun       r13
+alias NightTime         r14
 
 MAIN:
 yield
@@ -36,7 +39,7 @@ l RatioO2Inside     GSInside  RatioOxygen
 l TankNitrogenRatio Tank      RatioNitrogen
 lbn PressureGH GS HASH("Greenhouse-Inside-GasSensor") Pressure 0
 s db Setting PressureGH
-#l PressureO2     
+#l PressureO2
 #l TankTotalMoles Tank   Quantity
 
 slt TankPress   TankPress   1000
@@ -58,16 +61,23 @@ slt OnOff RatioO2Tank .3
 sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") On OnOff
 sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") Setting 100
 
-slt OnOff PressureGH 90 
-s db Setting OnOff
-sbn ActiveVent HASH("Tank-To-Greenhouse-AV") Mode 0
-sbn ActiveVent HASH("Tank-To-Greenhouse-AV") On OnOff
+#Vent is controlled by Console
+#slt OnOff PressureGH 90
+#sbn ActiveVent HASH("Tank-To-Greenhouse-AV") Mode 0
+#sbn ActiveVent HASH("Tank-To-Greenhouse-AV") On OnOff
 
 sgt OnOff PressureGH 110
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") Mode 1
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
+bgt OnOff 1 MAIN
+lb VerticalSun DaylightSensor Vertical 0
+abs VerticalSun VerticalSun
+sgt OnOff VerticalSun 120
+s db Setting VerticalSun
+sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
+s db Setting OnOff
 
-sgt OnOff RatioO2Inside 0.32
+sgt OnOff RatioO2Inside 0.31
 sbn Filtration HASH("Greenhouse-O2-Filter") On OnOff
 
 slt OnOff TankNitrogenRatio 0.05

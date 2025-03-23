@@ -14,21 +14,13 @@ alias OnOff r0
 MAIN:
 yield
 
-#Stirlings are on wrong network
-lbn r13 Combustor HASH("Combustor1") Pressure 0
-sgt OnOff r13 1000
-sbn StirlingEng HASH("Stirling1") Power OnOff
-
-lbn r13 StirlingEng HASH("Stirling1") Pressure 0
-sgt OnOff r13 1000
-sbn StirlingEng HASH("Stirling2") Power OnOff
-#leaving this in. for now just keep engines on
-
 # open condenser if low amount of water and pressure high
+lbn r14 Condenser HASH("Condenser1") Pressure 0
 lbn r13 Condenser HASH("Condenser1") TotalMoles 0
 lbn r12 Condenser HASH("Condenser1") RatioWater 0
 lbn r11 Condenser HASH("Condenser1") RatioSteam 0
 lbn r10 Condenser HASH("Condenser1") Pressure 0
+
 add r12 r11 r12
 mul r9 r12 r13
 
@@ -37,6 +29,7 @@ sgt r10 r10 1000
 and OnOff r9 r10
 sbn Condenser HASH("Condenser1") Open OnOff
 
+# check if it is safe to run combustor
 lbn r13 GasTank HASH("PreCondenserTank") Temperature 0
 lbn r12 GasTank HASH("PreCondenserTank") RatioWater 0
 lbn r11 GasTank HASH("PreCondenserTank") RatioSteam 0
@@ -44,16 +37,18 @@ lbn r10 GasTank HASH("PreCondenserTank") TotalMoles 0
 add r12 r11 r12
 mul r9 r12 r10
 
-# check if water moles in tank > 30 and temp > 450 K
+# check if water moles in tank > 10 and temp > 390 K
 sgt r9 r9 10
-slt OnOff r13 450
+slt OnOff r13 390
+slt r14 r14 300
+or OnOff OnOff r14
 and OnOff OnOff r9
 sbn Condenser HASH("Condenser1") On OnOff
 beqal OnOff 1 PAUSE
 
-# turn combustor off if fuel pressure below 5 MPa
+# turn combustor off if fuel pressure below 4 MPa
 lbn r13 InsGasTank HASH("Fuel Tank Ins") Pressure 0
-blt r13 5000 COMBUSTOROFF
+blt r13 4000 COMBUSTOROFF
 
 # run combustor only at night
 lbn r14 DaylightSensor HASH("CondenserDS") SolarIrradiance 0
@@ -62,6 +57,8 @@ bgtz r14 COMBUSTOROFF
 # this part has to stay at bottom of main loop
 lbn r13 GasTank HASH("PreCondenserTank") Pressure 0
 
+# 1.2 MPa seems a safe value for max pressure behind
+# the combustor and Stirling engines
 slt OnOff r13 1200
 sbn Combustor HASH("Combustor1") On OnOff
 

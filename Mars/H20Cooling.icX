@@ -1,0 +1,53 @@
+alias CoolingValve d0
+alias H20Tank      d1
+alias StatusLED    d2
+
+alias OnOff        r0
+alias Temp         r1
+
+s CoolingValve Lock 1
+
+MAIN:
+yield
+l Temp H20Tank Temperature
+bgtal Temp 295 COOLINGOPEN
+bltal Temp 293 COOLINGCLOSED
+
+l r3 H20Tank VolumeOfLiquid
+bltal r3 100 WARNING
+
+l r3  H20Tank RatioNitrousOxide
+bgtz r3 ERROR
+l r3  H20Tank RatioVolatiles
+bgtz r3 ERROR
+l r3  H20Tank RatioPollutant
+bgtz r3 ERROR
+#l r3  H20Tank RatioWater
+#bgtz r3 ERROR
+l r3  H20Tank RatioLiquidNitrousOxide
+bgtz r3 ERROR
+l r3  H20Tank RatioLiquidPollutant
+bgtz r3 ERROR
+l r3  H20Tank RatioLiquidVolatiles
+bgtz r3 ERROR
+l r3  H20Tank RatioLiquidVolatiles
+bgtz r3 ERROR
+j MAIN
+
+COOLINGOPEN:
+s CoolingValve On 1
+s StatusLED Color 0
+j ra
+
+COOLINGCLOSED:
+s CoolingValve On 0
+s StatusLED Color 6
+j ra
+
+WARNING:
+s StatusLED Color 3
+j ra
+
+ERROR:
+s StatusLED Color 4
+j MAIN
