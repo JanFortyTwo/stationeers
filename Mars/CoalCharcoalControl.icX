@@ -1,11 +1,43 @@
 alias CoalCharcoalSorter d0
-define Charcoal HASH("ItemCharcoal")
+alias Generator          d1
+alias CoalSilo           d2
+alias GeneratorLED       d3
+
+define Charcoal  HASH("ItemCharcoal")
+define batId     HASH("StructureBattery")
+define bigId     HASH("StructureBatteryLarge")
+define LED       -53151617
 
 MAIN:
 yield
+move r3 0
+lb r0 batId Charge Sum
+lb r1 bigId Charge Sum
+add r0 r0 r1 #sum all charge in watts
+lb r1 batId Maximum Sum
+lb r2 bigId Maximum Sum
+add r1 r1 r2 #sum max possible charge
+div r0 r0 r1
+mul r0 r0 100 #r0=% of charge remaining
+s db Setting r0 
+
+s GeneratorLED On r11
 s CoalCharcoalSorter Mode 1 # Any
 clr CoalCharcoalSorter # erase any stale instructions in RAM
-sll r0 Charcoal 8
-or r0 r0 SorterInstruction.FilterPrefabHashEquals
-put CoalCharcoalSorter 0 r0
+sll r10 Charcoal 8
+or r10 r10 SorterInstruction.FilterPrefabHashEquals
+put CoalCharcoalSorter 0 r10
+
+
+bgt r0 50 MAIN
+#if battery charge gets lower, burn coal in generator
+#jump back to MAIN if generator is already generating
+l r11 Generator PowerGeneration
+sgtz r11 r11
+bgtz r11 MAIN
+
+#otherwise, dump 1 stack of coal
+s CoalSilo Open 1
+s CoalSilo Open 0
+sleep 3
 j MAIN

@@ -2,8 +2,8 @@
 #Control up to 511 harvies on seperate cycles
 #Set veriables here to customise operation
 #Collect seeds Yes/No  Use Fertiliser Yes/No
-define GETSEEDS 0  # -1(No)  0(Yes)
-define USEPOOP 1 # 0(No)  1(Yes)
+define GETSEEDS -1  # -1(No)  0(Yes)
+define USEPOOP 0 # 0(No)  1(Yes)
 #Give the Harvie and Hydroponics tray the same name
 #Enter the names of the sets in the list here
 #Add as many as you want, end the list with "push 0"
@@ -25,6 +25,15 @@ push HASH("HydroHarvie16")
 push HASH("HydroHarvie17")
 push HASH("HydroHarvie18")
 push HASH("HydroHarvie19")
+push HASH("HydroHarvie21")
+push HASH("HydroHarvie22")
+push HASH("HydroHarvie23")
+push HASH("HydroHarvie24")
+push HASH("HydroHarvie25")
+push HASH("HydroHarvie26")
+push HASH("HydroHarvie27")
+push HASH("HydroHarvie28")
+push HASH("HydroHarvie29")
 #push HASH("Harvie Set 10")
 #push HASH("Harvie Set 11")
 #push HASH("Harvie Set 12")

@@ -15,7 +15,7 @@ MAIN:
 yield
 
 # open condenser if low amount of water and pressure high
-lbn r14 Condenser HASH("Condenser1") Pressure 0
+lbn r14 Condenser HASH("Condenser1") Temperature 0
 lbn r13 Condenser HASH("Condenser1") TotalMoles 0
 lbn r12 Condenser HASH("Condenser1") RatioWater 0
 lbn r11 Condenser HASH("Condenser1") RatioSteam 0
@@ -24,8 +24,8 @@ lbn r10 Condenser HASH("Condenser1") Pressure 0
 add r12 r11 r12
 mul r9 r12 r13
 
-slt r9 r9 0.3
-sgt r10 r10 1000
+slt r9 r9 0.1
+sgt r10 r10 15
 and OnOff r9 r10
 sbn Condenser HASH("Condenser1") Open OnOff
 
@@ -37,12 +37,13 @@ lbn r10 GasTank HASH("PreCondenserTank") TotalMoles 0
 add r12 r11 r12
 mul r9 r12 r10
 
-# check if water moles in tank > 10 and temp > 390 K
-sgt r9 r9 10
-slt OnOff r13 390
+# check if water moles in tank > 2 and temp > 390 K
+sgt r9 r9 2
+slt OnOff r13 373
 slt r14 r14 300
-or OnOff OnOff r14
-and OnOff OnOff r9
+and OnOff OnOff r14
+#and OnOff OnOff r9 leave condenser on even if low water content 
+#to get rid of pressure
 sbn Condenser HASH("Condenser1") On OnOff
 beqal OnOff 1 PAUSE
 

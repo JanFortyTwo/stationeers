@@ -3,6 +3,8 @@ alias Tank    d0
 alias Filter  d1
 alias AV      d2
 alias GS      d3
+alias AV2     d4
+alias VP      d5
 
 alias AmbientTemp      r1
 alias TankPress        r2
@@ -13,12 +15,15 @@ yield
 l AmbientTemp GS     Temperature
 l TankPress   Tank   Pressure
 
-slt TankPress   TankPress   20000
+slt TankPress   TankPress   10000
 sgt AmbientTemp AmbientTemp 270
 and OnOff TankPress AmbientTemp
 s db Setting OnOff
 s Filter On    OnOff
-s AV     Mode  1  # inward
-s AV     On    OnOff
-
+s AV     Mode    1  # inward
+s AV     On      OnOff
+s AV2    Mode    1  # inward
+s AV2    On      OnOff
+s VP     Setting 10
+s VP     On      OnOff
 j MAIN
