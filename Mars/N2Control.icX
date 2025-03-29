@@ -1,0 +1,31 @@
+alias Tank    d0
+alias Filter  d1
+alias AV      d2
+alias GS      d3
+alias Display d4
+alias VP      d5
+
+alias OnOff            r0
+alias AmbientTemp      r1
+alias TankPress        r2
+
+
+MAIN:
+yield
+l AmbientTemp GS     Temperature
+l TankPress   Tank   Pressure
+
+s Display On 1
+s Display Mode 0
+s Display Setting TankPress
+
+slt TankPress   TankPress   10000
+sgt AmbientTemp AmbientTemp 270
+and OnOff TankPress AmbientTemp
+s db Setting OnOff
+s Filter  On    OnOff
+s AV      Mode    1  # inward
+s AV      On      OnOff
+s VP      Setting 10
+s VP      On      OnOff
+j MAIN

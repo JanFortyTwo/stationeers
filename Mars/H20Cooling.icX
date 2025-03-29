@@ -30,8 +30,6 @@ l r3  H20Tank RatioLiquidPollutant
 bgtz r3 ERROR
 l r3  H20Tank RatioLiquidVolatiles
 bgtz r3 ERROR
-l r3  H20Tank RatioLiquidVolatiles
-bgtz r3 ERROR
 j MAIN
 
 COOLINGOPEN:

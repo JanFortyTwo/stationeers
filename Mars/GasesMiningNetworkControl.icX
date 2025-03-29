@@ -1,0 +1,74 @@
+define Filter         -348054045
+define LED             1944485013
+define WeatherStation  1997212478
+define LEDDisplayS    -815193061
+define WallLightLW     555215790
+define OccSensor       322782515
+define LiqTankBig      1098900430
+define DigitalValve   -1280984102
+alias  OnOff           r0
+
+MAIN:
+yield
+
+
+# Filtration Filter Status
+lbs r10 Filter 0 Quantity Minimum 
+lbs r11 Filter 1 Quantity Minimum 
+min r10 r10 r11
+slt OnOff r10 15
+sbn LED HASH("FiltrationFilterLED") On OnOff
+add OnOff OnOff 3
+sbn LED HASH("FiltrationFilterLED") Color OnOff
+
+# Water 
+lbn r10 LiqTankBig HASH("H2O Main Tank") Temperature 0
+sbn LEDDisplayS HASH("MainWaterTempLedDisplay") Setting r10
+bgtal r10 300 H2OWARNING
+bltal r10 260 H2OWARNING
+lbn r11 LiqTankBig HASH("H2O Main Tank") VolumeOfLiquid 0
+sbn LEDDisplayS HASH("MainWaterQtyLedDisplay") Setting r11
+bltal r11 100 H2OWARNING
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioNitrousOxide 0
+bgtzal r3 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioVolatiles 0
+bgtzal r3 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioPollutant 0
+bgtzal r3 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidNitrousOxide 0
+bgtzal r3 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidPollutant 0
+bgtzal r3 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidVolatiles 0
+bgtzal r3 H2OERROR
+lbn OnOff DigitalValve HASH("Main H20 Cooling Digital Valve") Open 0
+beqal OnOff 1 H2OCOOLINGOPEN
+beqal OnOff 0 H2OCOOLINGCLOSED
+j MAIN
+
+
+
+H2OCOOLINGOPEN:
+sbn LED HASH("MainWaterStatusLED") Color 0
+sbn LED HASH("MainWaterStatusLED") On 1
+j ra
+
+H2OCOOLINGCLOSED:
+sbn LED HASH("MainWaterStatusLED") Color 6
+sbn LED HASH("MainWaterStatusLED") On 1
+j ra
+
+H2OWARNING:
+sbn LED HASH("MainWaterStatusLED") Color 3
+sbn LED HASH("MainWaterStatusLED") On 1
+j ra
+
+H2OERROR:
+sbn LED HASH("MainWaterStatusLED") Color 4
+sbn LED HASH("MainWaterStatusLED") On 1
+j ra
+
+
+# CondenserToMainLVP
+# Main H20 Cooling Digital Valve
+#N2PressureLEDDisplay
