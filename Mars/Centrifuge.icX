@@ -1,9 +1,14 @@
-define Centr  690945935
-define Stacker -2020231820
-define Dial     554524804
+define Centr           690945935
+define Stacker        -2020231820
+define Dial            554524804
+define DaylightSensor  1076425094
+define DeepMiner       265720906
 
 MAIN:
 yield
+lbn r0 DaylightSensor HASH("Mining Daylight Sensor") Vertical 0
+sgt r0 r0 88
+sb DeepMiner On r0
 lbn r1 Centr HASH("Centrifuge 1") Reagents 2
 lbn r2 Centr HASH("Centrifuge 2") Reagents 2
 lbn r3 Centr HASH("Centrifuge 3") Reagents 2

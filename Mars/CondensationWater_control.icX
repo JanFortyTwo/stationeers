@@ -18,7 +18,7 @@ l r1 CondensationTank Temperature
 l r2 MainTank Temperature
 l r4 CondensationTank VolumeOfLiquid
 s LED On 1
-slt OnOff r1 293
+slt OnOff r1 275
 s LiquidHeater On OnOff
 l r3  CondensationTank RatioNitrousOxide
 bgtz r3 PUMPOFFERROR

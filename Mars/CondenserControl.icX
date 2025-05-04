@@ -7,12 +7,15 @@ define InsLiqTankLarge -1430440215
 define Combustor        1840108251
 define StirlingEng     -260316435
 define DaylightSensor   1076425094
+define PressureReg      209854039
 
 alias OnOff r0
 
 
 MAIN:
 yield
+
+sbn PressureReg HASH("Combustor1FuelPressureReg") On 1
 
 # open condenser if low amount of water and pressure high
 lbn r14 Condenser HASH("Condenser1") Temperature 0
@@ -24,9 +27,12 @@ lbn r10 Condenser HASH("Condenser1") Pressure 0
 add r12 r11 r12
 mul r9 r12 r13
 
-slt r9 r9 0.1
+slt r9 r9 0.01
 sgt r10 r10 15
 and OnOff r9 r10
+lbn r15 GasTank HASH("PreCondenserTank") Pressure 0
+sgt r15 r15 200
+and OnOff OnOff r15 
 sbn Condenser HASH("Condenser1") Open OnOff
 
 # check if it is safe to run combustor
@@ -39,9 +45,9 @@ mul r9 r12 r10
 
 # check if water moles in tank > 2 and temp > 390 K
 sgt r9 r9 2
-slt OnOff r13 373
-slt r14 r14 300
-and OnOff OnOff r14
+slt OnOff r13 363
+slt r14 r14 290
+or OnOff OnOff r14
 #and OnOff OnOff r9 leave condenser on even if low water content 
 #to get rid of pressure
 sbn Condenser HASH("Condenser1") On OnOff
@@ -49,7 +55,7 @@ beqal OnOff 1 PAUSE
 
 # turn combustor off if fuel pressure below 4 MPa
 lbn r13 InsGasTank HASH("Fuel Tank Ins") Pressure 0
-blt r13 4000 COMBUSTOROFF
+blt r13 500 COMBUSTOROFF
 
 # run combustor only at night
 lbn r14 DaylightSensor HASH("CondenserDS") SolarIrradiance 0
@@ -60,7 +66,7 @@ lbn r13 GasTank HASH("PreCondenserTank") Pressure 0
 
 # 1.2 MPa seems a safe value for max pressure behind
 # the combustor and Stirling engines
-slt OnOff r13 1200
+slt OnOff r13 500
 sbn Combustor HASH("Combustor1") On OnOff
 
 j MAIN
@@ -70,7 +76,7 @@ sbn Combustor HASH("Combustor1") On 0
 j MAIN
 
 PAUSE:
-sleep 2
+sleep 1
 j ra
 
 

@@ -33,11 +33,11 @@ bgt r0 50 MAIN
 #if battery charge gets lower, burn coal in generator
 #jump back to MAIN if generator is already generating
 l r11 Generator PowerGeneration
-sgtz r11 r11
 bgtz r11 MAIN
 
 #otherwise, dump 1 stack of coal
 s CoalSilo Open 1
+yield
 s CoalSilo Open 0
-sleep 3
+sleep 5
 j MAIN

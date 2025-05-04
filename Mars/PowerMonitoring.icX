@@ -6,6 +6,7 @@ define bigId         HASH("StructureBatteryLarge")
 define LED           -815193061
 define CableAnalyzer  1036015121
 define Generator      813146305
+define Silo           1155865682
 
 MAIN:
 move r3 0
@@ -34,6 +35,11 @@ lbn r6 CableAnalyzer HASH("TotalPowerGenCableAnalyzer") PowerActual 0
 sbn LED HASH("TotalPowerGenDisplay") Mode 2
 sbn LED HASH("TotalPowerGenDisplay") Setting r6
 
+lbn r7 Silo HASH("Coal Silo 2") Quantity 0
+sbn LED HASH("CoalSilo2Display") Setting r7
+slt r7 r7 100
+add r7 r7 2
+sbn LED HASH("CoalSilo2Display") Color r7
 
 sbn LED HASH("PowerBatteryPctDisplay") Mode 0
 sbn LED HASH("PowerBatteryPctDisplay") Setting r0

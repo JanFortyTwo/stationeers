@@ -1,4 +1,11 @@
 #  activating filter and pump when conditions are good
+#  filter out CO2 when a threshold is reached
+
+define GS         -1252983604
+define Filtration -348054045
+define AV         -1129453144
+
+
 alias Tank    d0
 alias Filter  d1
 alias AV      d2
@@ -15,10 +22,10 @@ yield
 l AmbientTemp GS     Temperature
 l TankPress   Tank   Pressure
 
-slt TankPress   TankPress   10000
-sgt AmbientTemp AmbientTemp 270
+slt TankPress   TankPress   5000
+sgt AmbientTemp AmbientTemp 273
 and OnOff TankPress AmbientTemp
-s db Setting OnOff
+#s db Setting OnOff
 s Filter On    OnOff
 s AV     Mode    1  # inward
 s AV     On      OnOff
@@ -26,4 +33,25 @@ s AV2    Mode    1  # inward
 s AV2    On      OnOff
 s VP     Setting 10
 s VP     On      OnOff
+
+# CO2 Filtration
+lbn r10 GS HASH("MainBaseGS") RatioCarbonDioxide 0
+s db Setting r10
+bgt r10 0.04 CO2FILTERON
+blt r10 0.02 CO2FILTEROFF
+
 j MAIN
+
+CO2FILTERON:
+sbn Filtration HASH("MainBaseCO2Filtration") On 1
+sbn AV HASH("MainBaseCO2ActiveVent") Mode 1
+sbn AV HASH("MainBaseCO2ActiveVent") On 1
+sbn AV HASH("MainBaseCO2ActiveVent") PressureInternal 10000
+j MAIN
+
+CO2FILTEROFF:
+sbn Filtration HASH("MainBaseCO2Filtration") On 0
+sbn AV HASH("MainBaseCO2ActiveVent") On 0
+j MAIN
+
+# MainBaseGS

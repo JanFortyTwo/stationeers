@@ -4,6 +4,7 @@ define TurboPump       1310794736
 define GS             -1252983604
 define Filtration     -348054045
 define DaylightSensor  1076425094
+define LED             1944485013
 
 alias Tank         d0
 alias CO2Filter    d1
@@ -42,7 +43,7 @@ s db Setting PressureGH
 #l PressureO2
 #l TankTotalMoles Tank   Quantity
 
-slt TankPress   TankPress   1000
+slt TankPress   TankPress   2000
 sgt AmbientTemp AmbientTemp 274
 #slt TankCO2Ratio TankCO2Ratio 0.5
 and OnOff TankPress AmbientTemp
@@ -52,10 +53,11 @@ s CO2AV     Mode  1  # inward
 s CO2AV     On    OnOff
 
 min RatioVola RatioVola RatioPollu
-sgt OnOff RatioVola .0005
+sgt OnOff RatioVola .00001
 s ToxicsFilter On OnOff
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
-#sbn Stacker HASH("Electronics Stacker") Setting r1
+sbn LED HASH("ToxicsLight") Color 4
+sbn LED HASH("ToxicsLight") On OnOff
 
 slt OnOff RatioO2Tank .3
 sbn TurboPump HASH("Oxygen-To-GreenhouseTank-TVP") On OnOff

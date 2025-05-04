@@ -14,6 +14,7 @@ define Recycler      -1633947337
 define Centrifuge     690945935
 define ArcFurnace    -247344692
 define Stacker        1585641623
+define DisplaySmall  -815193061
 
 
 MAIN:
@@ -25,30 +26,44 @@ l OnOff Switch Open
 s Composter On       1
 s Composter Activate OnOff
 
-lbn r10 Lever HASH("ComposterFurnaceLever") Open 0
-not r10 r10 
-sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") On 1
-sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") SettingOutput 0
-sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") Mode r10
+lbn r9 Centrifuge HASH("ArcFurnace1Centrifuge1") Reagents 0
+sbn DisplaySmall HASH("ArcFurnace1Centrifuge1Display") Setting r9
+lbn r9 Centrifuge HASH("ArcFurnace1Centrifuge2") Reagents 0
+sbn DisplaySmall HASH("ArcFurnace1Centrifuge2Display") Setting r9
+
+# not in use
+#lbn r10 Lever HASH("ComposterFurnaceLever") Open 0
+#not r10 r10 
+#sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") On 1
+#sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") SettingOutput 0
+#sbn DigiFlipFlopL HASH("ComposterFurnaceFlipFlop") Mode r10
 
 sbn Stacker HASH("ArcFurnace1Stacker") On 1
+sbn Stacker HASH("ArcFurnace1Stacker") Setting 50
 
 lbns OnOff Recycler HASH("ArcFurnace1Recycler") 0 Occupied 0
 sbn Recycler HASH("ArcFurnace1Recycler") On OnOff
 
 lbn OnOff Recycler HASH("ArcFurnace1Recycler") Reagents 0
-sgtz OnOff Reagents
+sgtz OnOff OnOff
 sbn Recycler HASH("ArcFurnace1Recycler") On OnOff
 
 lbns OnOff ArcFurnace HASH("ArcFurnace1") 0 Occupied 0
 s db Setting OnOff
 sbn ArcFurnace HASH("ArcFurnace1") Activate OnOff
 
-lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge") 0 Occupied 0
+lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge1") 0 Occupied 0
 #sbn Centrifuge HASH("ArcFurnace1Centrifuge") On 
-lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge") Reagents 0
+lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge1") Reagents 0
 bgtal r11 49 Empty1
 bltal r11 1 Close1
+
+
+lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge2") 0 Occupied 0
+#sbn Centrifuge HASH("ArcFurnace1Centrifuge") On 
+lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge2") Reagents 0
+bgtal r11 49 Empty2
+bltal r11 1 Close2
 
 bltal Press 30 VENTOFF
 bltal Press 50  FILTEROFF
@@ -73,16 +88,28 @@ j MAIN
 
 VENTOFF:
 s AV On 0
-j MAIN
+j ra
 
 Empty1:
-sbn Centrifuge HASH("ArcFurnace1Centrifuge") On 0
-sbn Centrifuge HASH("ArcFurnace1Centrifuge") Open 1
+sbn Centrifuge HASH("ArcFurnace1Centrifuge1") On 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge1") Open 1
 sleep 2
 j ra
 
 Close1:
-sbn Centrifuge HASH("ArcFurnace1Centrifuge") Open 0
-sbn Centrifuge HASH("ArcFurnace1Centrifuge") On 1
+sbn Centrifuge HASH("ArcFurnace1Centrifuge1") Open 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge1") On 1
+sleep 2
+j ra
+
+Empty2:
+sbn Centrifuge HASH("ArcFurnace1Centrifuge2") On 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge2") Open 1
+sleep 2
+j ra
+
+Close2:
+sbn Centrifuge HASH("ArcFurnace1Centrifuge2") Open 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge2") On 1
 sleep 2
 j ra

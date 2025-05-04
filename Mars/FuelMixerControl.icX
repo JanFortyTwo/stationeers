@@ -1,40 +1,42 @@
 # Fuel Mixing 
-# based on StanBernieStan workshop script
+# Based on Stationeers Temperature Indepentent Fuel Mixing
 alias VolTank    d0
 alias OxygenTank d1
 alias FuelMixer  d2
 alias FuelTank   d3 
 
-alias MolesHydrogen     r0
-alias MolesOxygen       r1
+alias Volp              r0
+alias Oxygenp           r1
 alias Input1MixPercent  r2
 alias pMax              r4
-alias pNow              r5
-alias SourceMolesMin    r6
+alias Fuelp             r5
+alias VolT              r6
+alias OxygenT           r7
 
 
 INIT:
 s FuelMixer Lock 0
-add pMax 0 6000
-add SourceMolesMin 0 10000
 
 MAIN:
-l MolesHydrogen VolTank TotalMoles
-l MolesOxygen OxygenTank TotalMoles
-l pNow FuelTank Pressure
-div Input1MixPercent MolesHydrogen MolesOxygen
-div Input1MixPercent Input1MixPercent 2
-add Input1MixPercent Input1MixPercent 1
-div Input1MixPercent 1 Input1MixPercent
-mul Input1MixPercent Input1MixPercent 100
+yield
+l Volp VolTank Pressure
+l Oxygenp OxygenTank Pressure
+l Fuelp FuelTank Pressure
+l OxygenT OxygenTank Temperature
+l VolT VolTank Temperature
+
+mul Input1MixPercent VolT 2
+div Input1MixPercent OxygenT Input1MixPercent
+add Input1MixPercent 1 Input1MixPercent
+div Input1MixPercent 100 Input1MixPercent
 s FuelMixer Setting Input1MixPercent
 
-blt MolesOxygen SourceMolesMin ENDMIXER
-blt MolesHydrogen SourceMolesMin ENDMIXER
-bgt pNow pMax ENDMIXER
+blt Oxygenp 4000 ENDMIXER
+blt Volp 2000 ENDMIXER
+bgt Fuelp 6000 ENDMIXER
 s FuelMixer On 1
-yield
 j MAIN
+
 ENDMIXER:
 s FuelMixer On 0 
 yield
