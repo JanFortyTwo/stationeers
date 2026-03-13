@@ -1,0 +1,37 @@
+define Filter         -348054045
+define LED             1944485013
+define WeatherStation  1997212478
+define LEDDisplayS    -815193061
+define WallLightLW     555215790
+define OccSensor       322782515
+alias  OnOff           r0
+
+MAIN:
+yield
+
+# Room Lights
+lb OnOff OccSensor Activate 0
+sbn WallLightLW On OnOff
+
+# Filtration Filter Status
+lbs r10 Filter 0 Quantity Minimum 
+lbs r11 Filter 1 Quantity Minimum 
+min r10 r10 r11
+slt OnOff r10 15
+sbn LED HASH("FiltrationFilterLED") On OnOff
+add OnOff OnOff 3
+sbn LED HASH("FiltrationFilterLED") Color OnOff
+
+# Weather 
+lbn r10 WeatherStation HASH("Weather Station") Mode 0
+lbn r11 WeatherStation HASH("Weather Station") NextWeatherEventTime 0
+sbn LEDDisplayS HASH("WeatherConsole") Setting r11
+sbn LED HASH("WeatherLED") On 0
+bgtzal r10 WEATHERLED
+j MAIN
+
+WEATHERLED:
+sbn LED HASH("WeatherLED") On 1
+add r10 r10 2
+sbn LED HASH("WeatherLED") Color r10
+j ra

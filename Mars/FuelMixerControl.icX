@@ -1,0 +1,43 @@
+# Fuel Mixing 
+# Based on Stationeers Temperature Indepentent Fuel Mixing
+alias VolTank    d0
+alias OxygenTank d1
+alias FuelMixer  d2
+alias FuelTank   d3 
+
+alias Volp              r0
+alias Oxygenp           r1
+alias Input1MixPercent  r2
+alias pMax              r4
+alias Fuelp             r5
+alias VolT              r6
+alias OxygenT           r7
+
+
+INIT:
+s FuelMixer Lock 0
+
+MAIN:
+yield
+l Volp VolTank Pressure
+l Oxygenp OxygenTank Pressure
+l Fuelp FuelTank Pressure
+l OxygenT OxygenTank Temperature
+l VolT VolTank Temperature
+
+mul Input1MixPercent VolT 2
+div Input1MixPercent OxygenT Input1MixPercent
+add Input1MixPercent 1 Input1MixPercent
+div Input1MixPercent 100 Input1MixPercent
+s FuelMixer Setting Input1MixPercent
+
+blt Oxygenp 4000 ENDMIXER
+blt Volp 2000 ENDMIXER
+bgt Fuelp 6000 ENDMIXER
+s FuelMixer On 1
+j MAIN
+
+ENDMIXER:
+s FuelMixer On 0 
+yield
+j MAIN

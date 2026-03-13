@@ -1,0 +1,18 @@
+alias CoolingValve d0
+alias InsideGS     d1
+alias LED          d2
+
+alias OnOff        r0
+alias Temp         r1
+
+#s CoolingValve Lock 1
+
+MAIN:
+yield
+l Temp InsideGS Temperature
+sgt OnOff Temp 296
+s CoolingValve On OnOff
+s LED Color 0
+s LED On OnOff
+j MAIN
+

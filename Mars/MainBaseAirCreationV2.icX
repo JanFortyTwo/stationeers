@@ -1,0 +1,59 @@
+#  activating filter and pump when conditions are good
+#  filter out CO2 when a threshold is reached
+
+alias Tank     d0
+alias MainTank d1
+alias AV       d2
+alias GS       d3
+alias VP       d5
+
+alias AmbientTemp       r1
+alias TankPress         r2
+alias OnOff             r3
+alias LiquidVolume      r4
+alias RatioN2           r5
+alias RatioO2           r6
+alias RatioClean        r7
+alias MainTankPress     r8
+
+MAIN:
+yield
+l AmbientTemp   GS       Temperature
+l TankPress     Tank     Pressure
+l LiquidVolume  Tank     VolumeOfLiquid
+l RatioN2       Tank     RatioNitrogen
+l RatioO2       Tank     RatioOxygen
+l MainTankPress MainTank Pressure
+
+add  RatioClean    RatioO2      RatioN2
+#s db Setting RatioClean
+
+
+# 1. Vent In when low temp and tank press ok
+slt TankPress   TankPress   10000
+slt AmbientTemp AmbientTemp 229
+and OnOff TankPress AmbientTemp
+s AV     Mode             1  # inward
+s AV     On               OnOff
+
+# 2. Pump to main tank when mix is clean
+#    Pump only during day
+#    Pump only when Main Tank can 
+#    accomodate more gas
+l AmbientTemp   GS       Temperature
+l TankPress     Tank     Pressure
+blt  AmbientTemp   260          PUMPOFF
+blt  TankPress     4000         PUMPOFF
+bgt  MainTankPress 30000        PUMPOFF
+sgt  RatioClean    RatioClean   0.9995
+slt  LiquidVolume  LiquidVolume 0.0001
+s    db            Setting      RatioClean
+and  OnOff         LiquidVolume RatioClean
+s    VP            On           OnOff
+s    VP            Setting      10
+
+j MAIN
+
+PUMPOFF:
+s    VP            On           0
+j MAIN

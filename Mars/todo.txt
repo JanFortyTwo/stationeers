@@ -1,0 +1,10 @@
+
+amount dials with automation for printers
+main base pressurization regulation
+greenhouse remake
+
+
+
+done
+move all printers inside
+logic for centrifuges

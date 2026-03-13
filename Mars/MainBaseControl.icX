@@ -1,0 +1,30 @@
+define Filter         -348054045
+define LED             1944485013
+define WeatherStation  1997212478
+define LEDDisplayS    -815193061
+define WallLightLW     555215790
+define OccSensor       322782515
+define TankBigIns      1280378227
+
+alias  OnOff           r0
+
+MAIN:
+yield
+
+# Room Lights
+#lb OnOff OccSensor Activate 0
+#sbn WallLightLW On OnOff
+
+# Filtration Filter Status
+lbs r10 Filter 0 Quantity Minimum 
+lbs r11 Filter 1 Quantity Minimum 
+min r10 r10 r11
+slt OnOff r10 15
+sbn LED HASH("MainBaseFilterStatusLED") On OnOff
+add OnOff OnOff 3
+sbn LED HASH("MainBaseFilterStatusLED") Color OnOff
+
+# Air Tank Pressure
+lbn r10 TankBigIns HASH("MainBase-Air-InsTank") Pressure Average
+sbn LEDDisplayS HASH("MainBaseMainAirTankPressureLEDDisplay") Setting r10
+j MAIN

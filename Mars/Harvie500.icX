@@ -1,0 +1,114 @@
+#Harvie 500 controller 11/Apr/2023   CowsAreEvil
+#Control up to 511 harvies on seperate cycles
+#Set veriables here to customise operation
+#Collect seeds Yes/No  Use Fertiliser Yes/No
+define GETSEEDS -1  # -1(No)  0(Yes)
+define USEPOOP 0 # 0(No)  1(Yes)
+#Give the Harvie and Hydroponics tray the same name
+#Enter the names of the sets in the list here
+#Add as many as you want, end the list with "push 0"
+push HASH("HydroHarvie1")
+push HASH("HydroHarvie2")
+push HASH("HydroHarvie3")
+push HASH("HydroHarvie6")
+push HASH("HydroHarvie5")
+push HASH("HydroHarvie6")
+push HASH("HydroHarvie7")
+push HASH("HydroHarvie8")
+push HASH("HydroHarvie9")
+push HASH("HydroHarvie11")
+push HASH("HydroHarvie12")
+push HASH("HydroHarvie13")
+push HASH("HydroHarvie14")
+push HASH("HydroHarvie15")
+push HASH("HydroHarvie16")
+push HASH("HydroHarvie17")
+push HASH("HydroHarvie18")
+push HASH("HydroHarvie19")
+push HASH("HydroHarvie21")
+push HASH("HydroHarvie22")
+push HASH("HydroHarvie23")
+push HASH("HydroHarvie24")
+push HASH("HydroHarvie25")
+push HASH("HydroHarvie26")
+push HASH("HydroHarvie27")
+push HASH("HydroHarvie28")
+push HASH("HydroHarvie29")
+push HASH("HydroHarvie40")
+push HASH("HydroHarvie41")
+push HASH("HydroHarvie42")
+push HASH("HydroHarvie43")
+push HASH("HydroHarvie44")
+push HASH("HydroHarvie45")
+push HASH("HydroHarvie46")
+push HASH("HydroHarvie47")
+push HASH("HydroHarvie48")
+push HASH("HydroHarvie49")
+push HASH("HydroHarvie51")
+push HASH("HydroHarvie52")
+push HASH("HydroHarvie53")
+push HASH("HydroHarvie54")
+push HASH("HydroHarvie55")
+push HASH("HydroHarvie56")
+push HASH("HydroHarvie57")
+push HASH("HydroHarvie58")
+push HASH("HydroHarvie59")
+push HASH("HydroHarvie60")
+push HASH("HydroHarvie61")
+push HASH("HydroHarvie62")
+push HASH("HydroHarvie63")
+push HASH("HydroHarvie64")
+push HASH("HydroHarvie65")
+push HASH("HydroHarvie66")
+push HASH("HydroHarvie67")
+push HASH("HydroHarvie68")
+push HASH("HydroHarvie69")
+push HASH("HydroHarvie71")
+push HASH("HydroHarvie72")
+push HASH("HydroHarvie73")
+push HASH("HydroHarvie74")
+push HASH("HydroHarvie75")
+push HASH("HydroHarvie76")
+push HASH("HydroHarvie77")
+push HASH("HydroHarvie78")
+push HASH("HydroHarvie79")
+#push HASH("Harvie Set 10")
+#push HASH("Harvie Set 11")
+#push HASH("Harvie Set 12")
+push 0
+
+#Dont edit anything below here
+alias setname r10
+define HARVIE 958056199
+define TRAY -1841632400
+
+s db Setting 1
+
+reset:
+move sp 0
+start:
+yield
+add sp sp 1
+peek setname
+beqz setname reset
+
+checkdevice:
+lbn r0 HARVIE setname Activate Minimum
+bnez r0 start
+lbns r0 TRAY setname 0 Mature Minimum
+beq r0 -1 plant
+bne r0 1 start
+lbns r0 TRAY setname 0 Seeding Minimum
+blt r0 GETSEEDS start
+sbn HARVIE setname Harvest 1
+j start
+
+plant:
+l r0 db Setting
+beqz r0 start
+lbns r0 HARVIE setname 0 Quantity Minimum
+beqz r0 start
+lbns r0 TRAY setname 1 Quantity Minimum
+blt r0 USEPOOP start
+sbn HARVIE setname Plant 1
+j start

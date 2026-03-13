@@ -1,0 +1,114 @@
+move sp 0
+### BEGIN CONFIGURATION SECTION ###
+push 1924673028   #Soy Bean
+push -1057658015   #Wheat
+push 1929046963 # Potato
+### END CONFIGURATION SECTION ###
+alias VendMachine d0
+alias Sorter d1  # optional
+alias Stacker d2 # optional
+alias Dial d3
+alias LEDcount d4
+alias Button d5
+alias RecentDialValue r15
+alias RequestItem r14
+alias FullStackSize r13
+alias SlotCounter r12
+alias ItemsCount r11
+sub sp sp 1
+s Dial Mode sp
+move RecentDialValue -1
+setup:
+move SlotCounter 102
+bdns Stacker main # skip optional setup
+s Sorter On 1
+s Sorter Mode 2
+s Stacker On 1
+s Stacker Lock 0 # used to control from other IC
+main:
+l sp Dial Setting
+sne r0 RecentDialValue sp # event: dial changed
+move RecentDialValue sp
+bnez r0 handleEvent
+l r1 Button Setting # event: item requested
+brdns Stacker 3
+l r2 Stacker Lock
+or r1 r2 r1 # event: item requested(via other IC?)
+bnez r1 requestItem
+sge r1 SlotCounter 102 # event: vend scan complete
+beqz r1 ra # no events occurs, continue scan
+handleEvent: # re-start scan, update item hash
+yield
+s LEDcount Setting ItemsCount # show items count
+move ItemsCount 0
+move SlotCounter 1
+beqz r0 countItems # dial untouched? skip next lines
+s LEDcount Setting 0
+add sp RecentDialValue 1
+peek RequestItem
+beqz RequestItem 0 # work around the game bug
+s db Setting RequestItem
+countItems:
+add SlotCounter SlotCounter 1
+bge SlotCounter 102 main # exit on complete
+mod r0 SlotCounter 15
+beqzal r0 main # pause this coroutine
+ls r7 VendMachine SlotCounter OccupantHash
+bne r7 RequestItem countItems
+ls r8 VendMachine SlotCounter Quantity
+add ItemsCount ItemsCount r8
+l r8 LEDcount Setting
+max r8 ItemsCount r8
+s LEDcount Setting r8
+j countItems
+
+requestItem:
+l RequestItem db Setting
+bdse Stacker cookSpaghettiWithStacker
+request:
+l r9 VendMachine ExportCount
+s VendMachine RequestHash RequestItem
+bdns Stacker handleEvent
+sleep 2
+l r2 VendMachine ExportCount
+sne r9 r9 r2
+bnez r9 ra
+j complete
+cookSpaghettiWithStacker:
+l r10 Stacker Setting
+s Stacker Mode 1
+s Stacker ClearMemory 1
+s Sorter ClearMemory 1
+jal request
+ls FullStackSize Stacker 2 MaxQuantity
+breqz FullStackSize -1
+min FullStackSize r10 FullStackSize
+div r8 r10 FullStackSize
+trunc r8 r8 # number of full stacks
+mod r7 r10 FullStackSize # partial stack items count
+delivery:
+ls r2 Stacker 2 Quantity
+bltal r2 FullStackSize request
+blt r2 FullStackSize delivery
+s Sorter Output 0
+s Stacker Output 1
+l r0 Sorter Output
+brne r0 -1 -1
+l r0 Stacker ExportCount
+bltal r0 r8 request
+blt r0 r8 delivery
+yield
+s Stacker Setting r7 # eject partial stack
+move FullStackSize r7
+add r8 r8 1
+move r7 0
+bnez FullStackSize delivery
+complete:
+ls r2 Stacker 2 Quantity
+breqz r2 3
+s Sorter Output r9 # will be 0 if not enough items
+s Stacker Activate 1
+l r0 Sorter Output
+bne r0 -1 complete
+s Stacker Setting r10
+j setup
