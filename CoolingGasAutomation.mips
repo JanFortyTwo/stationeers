@@ -28,9 +28,9 @@ alias pCanisterMax      r14
 
 INIT:
 
-add pMin         0   4000
-add pMax         0   6000
+add pMax         0   500
 add pCanisterMax 0   3000
+add OnOff        0   0
 
 MAIN:
 s GasMixAnalyzer    On 1
@@ -50,8 +50,8 @@ s db Setting pNow
 # sgt OnOff Tnow Tmax 
 # slt OnOff Tnow Tmin
 # s CoolingHeater On OnOff
-blt GMCoolingMoles 200 ENDFILTER
-slt OnOff pNow 8000
+blt GMCoolingMoles 2 ENDFILTER
+slt OnOff pNow pMax
 s CoolingFilter On OnOff
 
 j MAIN

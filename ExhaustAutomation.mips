@@ -15,7 +15,9 @@ alias OnOff          r3
 
 MAIN:
 move OnOff 0
+sleep 2
 s PumpToBus On 0
+s PumpToVacuum On 0
 bdns ExhaustTank MAIN
 s GasMixAnalyzer   On 1
 s PumpToVacuum Setting 100
@@ -25,16 +27,11 @@ l pNow  ExhaustTank Pressure
 l GMp   GasMixAnalyzer   Pressure
 yield
 s db Setting Tnow
+blt pNow 5 MAIN
 sgt OnOff pNow 40000
 s PumpToVacuum On OnOff
 bgt GMp 20000 MAIN
 bgt Tnow 293 MAIN
-blt pNow 500 MAIN
+#blt pNow 500 MAIN
 s PumpToBus On 1
-sleep 5
 j MAIN
-
-
-j MAIN
-
-

@@ -1,0 +1,36 @@
+# Controls H2 Combustor output
+# - activates X + Pol filter when necessary
+# - operates valve to heat exchange to meet T requirements
+
+alias GasAnalyzer     d1
+alias HEValve         d2
+alias FilterDevice    d3
+
+alias TNow            r0
+alias pNow            r1
+alias OnOff           r2
+alias FilterOnOff     r3
+alias PollutantRatio  r4
+alias VolatilesRatio  r5
+
+MAIN:
+# Filter section
+move OnOff 0
+s GasAnalyzer   On 1
+l TNow  GasAnalyzer Temperature
+l pNow  GasAnalyzer Pressure
+l PollutantRatio GasAnalyzer RatioPollutant
+l VolatilesRatio GasAnalyzer RatioVolatiles
+mul PollutantRatio PollutantRatio 100
+mul VolatilesRatio VolatilesRatio 100
+or OnOff PollutantRatio VolatilesRatio
+yield
+s db Setting PollutantRatio
+s FilterDevice On OnOff
+# Cooling Valve Section
+move OnOff 0
+sgt OnOff TNow 333
+s HEValve On OnOff
+j MAIN
+
+
