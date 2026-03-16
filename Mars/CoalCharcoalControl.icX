@@ -1,7 +1,11 @@
+# sorts coal and charcoal to their silos
+# retrieves coal or charcoal from silo
+
 alias CoalCharcoalSorter d0
 alias Generator          d1
 alias CoalSilo           d2
 alias GeneratorLED       d3
+alias CharCoalSilo       d4
 
 define Charcoal  HASH("ItemCharcoal")
 define batId     HASH("StructureBattery")
@@ -29,15 +33,17 @@ or r10 r10 SorterInstruction.FilterPrefabHashEquals
 put CoalCharcoalSorter 0 r10
 
 
-bgt r0 50 MAIN
+#bgt r0 50 MAIN
+# TESTING
+bgt r0 70 MAIN
 #if battery charge gets lower, burn coal in generator
 #jump back to MAIN if generator is already generating
 l r11 Generator PowerGeneration
 bgtz r11 MAIN
 
 #otherwise, dump 1 stack of coal
-s CoalSilo Open 1
+s CharCoalSilo Open 1
 yield
-s CoalSilo Open 0
+s CharCoalSilo Open 0
 sleep 5
 j MAIN

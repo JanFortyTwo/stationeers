@@ -1,3 +1,5 @@
+# for Nitrogen filtering from Mars
+# atmosphere
 alias Tank    d0
 alias Filter  d1
 alias AV      d2
@@ -20,7 +22,9 @@ s Display Mode 0
 s Display Setting TankPress
 
 slt TankPress   TankPress   10000
-sgt AmbientTemp AmbientTemp 270
+# old value
+#sgt AmbientTemp AmbientTemp 270
+sgt AmbientTemp AmbientTemp 170
 and OnOff TankPress AmbientTemp
 s db Setting OnOff
 s Filter  On    OnOff

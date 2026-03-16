@@ -33,7 +33,7 @@ s FuelMixer Setting Input1MixPercent
 
 blt Oxygenp 4000 ENDMIXER
 blt Volp 2000 ENDMIXER
-bgt Fuelp 6000 ENDMIXER
+bgt Fuelp 8000 ENDMIXER
 s FuelMixer On 1
 j MAIN
 

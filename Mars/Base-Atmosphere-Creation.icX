@@ -1,10 +1,8 @@
-#  activating filter and pump when conditions are good
 #  filter out CO2 when a threshold is reached
 
 define GS         -1252983604
 define Filtration -348054045
 define AV         -1129453144
-
 
 alias Tank    d0
 alias Filter  d1
@@ -19,20 +17,6 @@ alias OnOff            r3
 
 MAIN:
 yield
-l AmbientTemp GS     Temperature
-l TankPress   Tank   Pressure
-
-slt TankPress   TankPress   5000
-sgt AmbientTemp AmbientTemp 273
-and OnOff TankPress AmbientTemp
-#s db Setting OnOff
-s Filter On    OnOff
-s AV     Mode    1  # inward
-s AV     On      OnOff
-s AV2    Mode    1  # inward
-s AV2    On      OnOff
-s VP     Setting 10
-s VP     On      OnOff
 
 # CO2 Filtration
 lbn r10 GS HASH("MainBaseGS") RatioCarbonDioxide 0
