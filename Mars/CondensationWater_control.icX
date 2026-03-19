@@ -1,6 +1,6 @@
 # Pumps water from condensation tank
 # to main tank if conditions are right
-# Since there are radtiators in the 
+# Since there are radtiators in the
 # condensationsystem, a heater will
 # also be activated if heating is necessary
 alias CondensationTank d0
@@ -22,7 +22,7 @@ slt OnOff r1 275
 s LiquidHeater On OnOff
 l r3  CondensationTank RatioNitrousOxide
 bgtz r3 PUMPOFFERROR
-l r3  CondensationTank RatioVolatiles
+#l r3  CondensationTank RatioVolatiles
 bgtz r3 PUMPOFFERROR
 l r3  CondensationTank RatioPollutant
 bgtz r3 PUMPOFFERROR
@@ -32,16 +32,13 @@ l r3  CondensationTank RatioLiquidNitrousOxide
 bgtz r3 PUMPOFFERROR
 l r3  CondensationTank RatioLiquidPollutant
 bgtz r3 PUMPOFFERROR
-l r3  CondensationTank RatioLiquidVolatiles
-bgtz r3 PUMPOFFERROR
-l r3  CondensationTank RatioLiquidVolatiles
-bgtz r3 PUMPOFFERROR
+#l r3  CondensationTank RatioLiquidVolatiles
+#bgtz r3 PUMPOFFERROR
 
 bgt r1 370 PUMPOFF
 bgt r2 313 PUMPOFF
 blt r4  1 PUMPOFF
 bgt r4 2 PUMPON
-
 
 j MAIN
 

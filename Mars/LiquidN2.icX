@@ -1,0 +1,33 @@
+#  for liquid Nitrogen generation
+
+define GS         -1252983604
+define Filter     -348054045
+define AV         -1129453144
+define PA         435685051
+define LPA        -2113838091
+
+alias AmbientTemp      r1
+alias TankPress        r2
+alias OnOff            r3
+
+MAIN:
+yield
+
+# CO2 Filtration
+lbn r10 Filter HASH("N2LiquidizerFilter") PressureInput 0
+lbn r11 PA HASH("N2LiquidizerGasPA") Pressure 0
+s db Setting r11
+yield
+s db Setting r10
+sgt r10 r10 2000
+slt r11 r11 10000
+and r11 r10 r11
+yield
+s db Setting r11
+#bgtz r11 N2FILTERON
+sbn Filter HASH("N2LiquidizerFilter") On r11
+j MAIN
+
+#N2FILTERON:
+#sbn Filter HASH("N2LiquidizerFilter") On 1
+#j MAIN

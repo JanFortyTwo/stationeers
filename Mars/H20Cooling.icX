@@ -13,23 +13,21 @@ l Temp H20Tank Temperature
 bgtal Temp 295 COOLINGOPEN
 bltal Temp 293 COOLINGCLOSED
 
-l r3 H20Tank VolumeOfLiquid
-bltal r3 100 WARNING
+#l r3 H20Tank VolumeOfLiquid
+#bltal r3 100 WARNING
 
 l r3  H20Tank RatioNitrousOxide
 bgtz r3 ERROR
-l r3  H20Tank RatioVolatiles
-bgtz r3 ERROR
+#l r3  H20Tank RatioVolatiles
+#bgtz r3 ERROR
 l r3  H20Tank RatioPollutant
 bgtz r3 ERROR
-#l r3  H20Tank RatioWater
-#bgtz r3 ERROR
 l r3  H20Tank RatioLiquidNitrousOxide
 bgtz r3 ERROR
 l r3  H20Tank RatioLiquidPollutant
 bgtz r3 ERROR
-l r3  H20Tank RatioLiquidVolatiles
-bgtz r3 ERROR
+#l r3  H20Tank RatioLiquidVolatiles
+#bgtz r3 ERROR
 j MAIN
 
 COOLINGOPEN:

@@ -20,8 +20,8 @@ INIT:
 MAIN:
 move OnOff 0
 l CO2Ratio db RatioCarbonDioxide
-l PollutantRatio db RatioPollutant
-l VolatilesRatio db RatioVolatiles
+#l PollutantRatio db RatioPollutant
+#l VolatilesRatio db RatioVolatiles
 l OxygenRatio db RatioOxygen
 l HelmetOpen Helmet Open 
 l ExtPress db PressureExternal
@@ -52,6 +52,6 @@ j ra
 HELMETCLOSE:
 s Suit AirRelease 1
 #s Suit On 0
-slt OnOff OxygenRatio 0.7
+slt OnOff OxygenRatio 0.8
 s Suit Filtration OnOff
 j ra
