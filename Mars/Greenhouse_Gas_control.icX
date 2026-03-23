@@ -34,7 +34,7 @@ l AmbientTemp       GSOutside Temperature
 l TankPress         Tank      Pressure
 l TankCO2Ratio      Tank      RatioCarbonDioxide
 l RatioPollu        GSInside  RatioPollutant
-l RatioVola         GSInside  RatioVolatiles
+l RatioVola         GSInside  RatioMethane
 l RatioO2Tank       Tank      RatioOxygen
 l RatioO2Inside     GSInside  RatioOxygen
 l TankNitrogenRatio Tank      RatioNitrogen

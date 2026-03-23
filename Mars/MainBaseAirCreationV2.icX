@@ -28,7 +28,6 @@ l MainTankPress MainTank Pressure
 add  RatioClean    RatioO2      RatioN2
 #s db Setting RatioClean
 
-
 # 1. Vent In when low temp and tank press ok
 slt TankPress   TankPress   10000
 slt AmbientTemp AmbientTemp 229
@@ -38,13 +37,13 @@ s AV     On               OnOff
 
 # 2. Pump to main tank when mix is clean
 #    Pump only during day
-#    Pump only when Main Tank can 
+#    Pump only when Main Tank can
 #    accomodate more gas
 l AmbientTemp   GS       Temperature
 l TankPress     Tank     Pressure
 blt  AmbientTemp   260          PUMPOFF
 blt  TankPress     4000         PUMPOFF
-bgt  MainTankPress 30000        PUMPOFF
+bgt  MainTankPress 40000        PUMPOFF
 sgt  RatioClean    RatioClean   0.9995
 slt  LiquidVolume  LiquidVolume 0.0001
 s    db            Setting      RatioClean

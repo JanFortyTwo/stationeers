@@ -30,20 +30,20 @@ lbn r11 LiqTankBig HASH("H2O Main Tank") VolumeOfLiquid 0
 sbn LEDDisplayS HASH("MainWaterQtyLedDisplay") Setting r11
 bltal r11 100 H2OWARNING
 lbn r9  LiqTankBig HASH("H2O Main Tank") RatioNitrousOxide 0
-bgtzal r3 H2OERROR
-lbn r9  LiqTankBig HASH("H2O Main Tank") RatioVolatiles 0
-bgtzal r3 H2OERROR
+bgtzal r9 H2OERROR
+lbn r9  LiqTankBig HASH("H2O Main Tank") RatioMethane 0
+bgtzal r9 H2OERROR
 lbn r9  LiqTankBig HASH("H2O Main Tank") RatioPollutant 0
-bgtzal r3 H2OERROR
+bgtzal r9 H2OERROR
 lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidNitrousOxide 0
-bgtzal r3 H2OERROR
+bgtzal r9 H2OERROR
 lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidPollutant 0
-bgtzal r3 H2OERROR
-lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidVolatiles 0
-bgtzal r3 H2OERROR
-lbn OnOff DigitalValve HASH("Main H20 Cooling Digital Valve") Open 0
-beqal OnOff 1 H2OCOOLINGOPEN
-beqal OnOff 0 H2OCOOLINGCLOSED
+bgtzal r9 H2OERROR
+#lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidMethane 0
+#bgtzal r3 H2OERROR
+lbn r9 DigitalValve HASH("Main H20 Cooling Digital Valve") On 0
+beqal r9 1 H2OCOOLINGOPEN
+beqal r9 0 H2OCOOLINGCLOSED
 j MAIN
 
 
