@@ -29,6 +29,13 @@ slt OnOff r10 15
 add OnOff OnOff 2
 sbn LED HASH("AlcoholFilterLED") Color OnOff
 
+lbns r10 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 0 Quantity Minimum 
+lbns r11 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 1 Quantity Minimum 
+min r10 r10 r11
+slt OnOff r10 15
+add OnOff OnOff 2
+sbn LED HASH("AlcoholFilterLED") Color OnOff
+
 # Water Purifier Charcoal Status
 lbns r10 WaterPurifier HASH("AlcoholWaterPurifier") 0 Quantity Minimum 
 slt OnOff r10 10
@@ -45,6 +52,10 @@ lbn r10 LiquidPipePA HASH("AlcoholLiquidPipePA") VolumeOfLiquid 0
 bgtal r10 100  FILTERON
 bltal r10 50   FILTEROFF
 
+lbn r10 Filter HASH("PureAlcoholPurgeN2Filter") PressureInput 0
+bgtal r10 5000 PURGEFILTERON
+bltal r10 3000 PURGEFILTEROFF
+
 # Start filtration unit when required
 lbn r10 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") RatioWater 0
 lbn r11 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") RatioPollutedWater 0
@@ -58,61 +69,46 @@ s db Setting r11
 beqzal r11  PURIFIEROFF
 beqal r11 1 PURIFIERON
 
-
-# lbn r11 LiqTankBig HASH("H2O Main Tank") VolumeOfLiquid 0
-# sbn LEDDisplayS HASH("MainWaterQtyLedDisplay") Setting r11
-# bltal r11 100 H2OWARNING
-# lbn r9  LiqTankBig HASH("H2O Main Tank") RatioNitrousOxide 0
-# bgtzal r9 H2OERROR
-# lbn r9  LiqTankBig HASH("H2O Main Tank") RatioMethane 0
-# bgtzal r9 H2OERROR
-# lbn r9  LiqTankBig HASH("H2O Main Tank") RatioPollutant 0
-# bgtzal r9 H2OERROR
-# lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidNitrousOxide 0
-# bgtzal r9 H2OERROR
-# lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidPollutant 0
-# bgtzal r9 H2OERROR
-# #lbn r9  LiqTankBig HASH("H2O Main Tank") RatioLiquidMethane 0
-# #bgtzal r3 H2OERROR
-# lbn r9 DigitalValve HASH("Main H20 Cooling Digital Valve") On 0
-# beqal r9 1 H2OCOOLINGOPEN
-# beqal r9 0 H2OCOOLINGCLOSED
 j MAIN
 
 HEATON:
 sbn LiqPipeHeater HASH("AlcoholPipeHeater") On 1
-#s StatusLED Color 0
 j ra
 
 HEATOFF:
 sbn LiqPipeHeater HASH("AlcoholPipeHeater") On 0
-#s StatusLED Color 6
 j ra
 
 FILTERON:
 sbn FiltrationLiq HASH("AlcoholWaterFilter") On 1
 sbn LED HASH("AlcoholStatusLED") Color 2 # green
-#s StatusLED Color 0
 j ra
 
 FILTEROFF:
 sbn FiltrationLiq HASH("AlcoholWaterFilter") On 0
 sbn LED HASH("AlcoholStatusLED") Color 6 # white
-#s StatusLED Color 6
 j ra
 
 PURIFIERON:
-sbn FiltrationLiq HASH("AlcoholWaterPurifier") On 1
+sbn WaterPurifier HASH("AlcoholWaterPurifier") On 1
 sbn LED HASH("AlcoholStatusLED") Color 0 # blue
-#s StatusLED Color 0
 j ra
 
 PURIFIEROFF:
 lbn r13 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") VolumeOfLiquid 0
 bgt r13 10 ra
-sbn FiltrationLiq HASH("AlcoholWaterPurifier") On 0
+sbn WaterPurifier HASH("AlcoholWaterPurifier") On 0
 sbn LED HASH("AlcoholStatusLED") Color 6 # white
-#s StatusLED Color 6
+j ra
+
+PURGEFILTERON:
+sbn Filter HASH("PureAlcoholPurgeN2Filter") On 1
+sbn LED HASH("AlcoholStatusLED") Color 2 # green
+j ra
+
+PURGEFILTEROFF:
+sbn Filter HASH("PureAlcoholPurgeN2Filter") On 0
+sbn LED HASH("AlcoholStatusLED") Color 6 # white
 j ra
 
 # CondenserToMainLVP
