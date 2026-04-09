@@ -1,18 +1,39 @@
+# Greenhouse-Cooling.icX
 alias CoolingValve d0
 alias InsideGS     d1
+alias LED        d2
 
-alias OnOff        r0
 alias Temp         r1
 
 s CoolingValve Lock 1
 
 MAIN:
 yield
+yield
+yield
 l Temp InsideGS Temperature
-sgt OnOff Temp 294
-s CoolingValve On OnOff
+s db Setting Temp
+bgtal Temp 298 COOLON
+bltal Temp 295 COOLOFF
 j MAIN
-sgt OnOff Temp 294
-s CoolingValve On OnOff
-j MAIN
+
+COOLON:
+s LED On 1
+s LED Color 0
+s CoolingValve On 1
+j ra
+
+COOLOFF:
+s CoolingValve On 0
+s LED On 0
+s LED Color 1
+j ra
+
+
+#sgt OnOff Temp 294
+#s CoolingValve On OnOff
+#j MAIN
+#sgt OnOff Temp 294
+#s CoolingValve On OnOff
+#j MAIN
 
