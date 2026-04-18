@@ -1,0 +1,69 @@
+define HydroLarre      85133079
+define HydroDev       -1841632400
+define Display        -815193061
+define ImportBin      -850484480
+define ArmSlot         0
+define TargetSlot      255
+define HopperSlot      1
+define MaxPosition     41
+
+alias TargetPos        r10
+alias CurrentPos       r11
+alias TargetSlotIdx    r12
+alias LarreIdle        r13
+alias PlantMature      r14
+alias PlantQty         r15
+
+MAIN:
+yield
+lbns r0 ImportBin HASH("HydroLarre3ImportBin") 0 Quantity 0
+seqz r0 r0
+sbn ImportBin HASH("HydroLarre3ImportBin") Open r0
+lbn TargetSlotIdx HydroLarre HASH("HydroLarre3") TargetSlotIndex 0
+lbn CurrentPos HydroLarre HASH("HydroLarre3") PositionX 0
+#sbn Display HASH("HydroLarre3Display4") Setting CurrentPos
+lbn LarreIdle HydroLarre HASH("HydroLarre3") Idle 0
+
+beqz LarreIdle MAIN
+
+sub TargetPos CurrentPos 1
+
+bltal TargetPos 2 GOHOME
+
+s db Setting TargetPos
+sbn HydroLarre HASH("HydroLarre3") Setting TargetPos
+
+TARGETACTION:
+yield
+beqzal TargetSlotIdx GETTARGET
+yield
+bgtal PlantMature 0 HARVEST
+yield
+lbns PlantQty HydroLarre HASH("HydroLarre3") TargetSlot Quantity 0
+yield
+beqzal PlantQty PLANT
+
+j MAIN
+
+GETTARGET:
+yield
+lbns PlantQty HydroLarre HASH("HydroLarre3") TargetSlot Quantity 0
+lbns PlantMature HydroLarre HASH("HydroLarre3") TargetSlot Mature 0
+j ra
+
+HARVEST:
+sbn HydroLarre HASH("HydroLarre3") Activate 1
+j TARGETACTION
+
+PLANT:
+sbn HydroLarre HASH("HydroLarre3") Activate 1
+s db Setting 333
+j ra
+
+GOHOME:
+move TargetPos 1
+sbn HydroLarre HASH("HydroLarre3") Setting TargetPos
+sleep 3
+sbn HydroLarre HASH("HydroLarre3") Activate 1
+move TargetPos MaxPosition
+j ra

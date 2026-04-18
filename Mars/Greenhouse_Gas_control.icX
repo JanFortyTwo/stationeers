@@ -48,7 +48,8 @@ sgt AmbientTemp AmbientTemp 274
 #slt TankCO2Ratio TankCO2Ratio 0.5
 and OnOff TankPress AmbientTemp
 
-s CO2Filter On    OnOff
+s CO2Filter On    1
+s CO2Filter Mode  OnOff
 s CO2AV     Mode  1  # inward
 s CO2AV     On    OnOff
 

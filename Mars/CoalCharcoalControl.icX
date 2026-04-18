@@ -6,6 +6,7 @@ alias Generator          d1
 alias CoalSilo           d2
 alias GeneratorLED       d3
 alias CharCoalSilo       d4
+alias DS                 d5
 
 define Charcoal  HASH("ItemCharcoal")
 define batId     HASH("StructureBattery")
@@ -40,6 +41,10 @@ bgt r0 70 MAIN
 #jump back to MAIN if generator is already generating
 l r11 Generator PowerGeneration
 bgtz r11 MAIN
+# Power generation only during night time well before sunrise
+l r12 DS Vertical
+bgt r12 145 MAIN
+blt r12  24 MAIN
 
 #otherwise, dump 1 stack of coal
 s CharCoalSilo Open 1

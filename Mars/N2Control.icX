@@ -20,16 +20,19 @@ l TankPress   Tank   Pressure
 s Display On 1
 s Display Mode 0
 s Display Setting TankPress
+s Filter On 1
 
 slt TankPress   TankPress   10000
 # old value
 #sgt AmbientTemp AmbientTemp 270
-sgt AmbientTemp AmbientTemp 170
+sgt AmbientTemp AmbientTemp 240
 and OnOff TankPress AmbientTemp
 s db Setting OnOff
-s Filter  On    OnOff
+s Filter  Mode    OnOff
+# Comment out if we currently take input from a tank
 s AV      Mode    1  # inward
 s AV      On      OnOff
+
 s VP      Setting 10
 s VP      On      OnOff
 j MAIN

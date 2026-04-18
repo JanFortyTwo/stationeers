@@ -22,39 +22,41 @@ sbn Fermenter HASH("Fermenter1") On 1
 sbn Fermenter HASH("Fermenter2") On 1
 
 # Filtration Filter Status
-lbns r10 FiltrationLiq HASH("AlcoholWaterFilter") 0 Quantity Minimum 
-lbns r11 FiltrationLiq HASH("AlcoholWaterFilter") 1 Quantity Minimum 
+lbns r10 FiltrationLiq HASH("AlcoholWaterFilter") 0 Quantity Minimum
+lbns r11 FiltrationLiq HASH("AlcoholWaterFilter") 1 Quantity Minimum
 min r10 r10 r11
 slt OnOff r10 15
 add OnOff OnOff 2
 sbn LED HASH("AlcoholFilterLED") Color OnOff
 
-lbns r10 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 0 Quantity Minimum 
-lbns r11 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 1 Quantity Minimum 
-min r10 r10 r11
-slt OnOff r10 15
-add OnOff OnOff 2
-sbn LED HASH("AlcoholFilterLED") Color OnOff
+#lbns r10 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 0 Quantity Minimum
+#lbns r11 FiltrationLiq HASH("PureAlcoholPurgeN2Filter") 1 Quantity Minimum
+#min r10 r10 r11
+#slt OnOff r10 15
+#add OnOff OnOff 2
+#sbn LED HASH("AlcoholFilterLED") Color OnOff
 
 # Water Purifier Charcoal Status
-lbns r10 WaterPurifier HASH("AlcoholWaterPurifier") 0 Quantity Minimum 
-slt OnOff r10 10
+lbns r10 WaterPurifier HASH("AlcoholWaterPurifier") 0 Quantity Minimum
+slt OnOff r10 50
 add OnOff OnOff 2
 sbn LED HASH("AlcoholFilterLED") Color OnOff
 
-# Heat contents below 10°C 
+# Heat contents below 10C
 lbn r10 LiquidPipePA HASH("AlcoholLiquidPipePA") Temperature 0
 bgtal r10 295 HEATOFF
 bltal r10 283 HEATON
 
 # Start liquid filtration when we have enough liquid
 lbn r10 LiquidPipePA HASH("AlcoholLiquidPipePA") VolumeOfLiquid 0
-bgtal r10 100  FILTERON
+#bgtal r10 100  FILTERON
+#temp keep alcohol pw combo
+bgtal r10 200  FILTERON
 bltal r10 50   FILTEROFF
 
 lbn r10 Filter HASH("PureAlcoholPurgeN2Filter") PressureInput 0
-bgtal r10 5000 PURGEFILTERON
-bltal r10 3000 PURGEFILTEROFF
+bgtal r10 2500 PURGEFILTERON
+bltal r10 500 PURGEFILTEROFF
 
 # Start filtration unit when required
 lbn r10 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") RatioWater 0
@@ -63,7 +65,7 @@ lbn r12 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") Volume 0
 lbn r13 LiquidPipePA HASH("AlcoholPollutedWaterLiqPA") VolumeOfLiquid 0
 div r12 r13 r12
 sgt r11 r11 0.9 # set when Polluted Water > 90% of content
-sgt r12 r12 0.5 # set when content > 50% of total volume
+sgt r12 r12 0.2 # set when content > 20% of total volume
 and r11 r11 r12 # logic AND both values
 s db Setting r11
 beqzal r11  PURIFIEROFF
@@ -81,11 +83,13 @@ j ra
 
 FILTERON:
 sbn FiltrationLiq HASH("AlcoholWaterFilter") On 1
+sbn FiltrationLiq HASH("AlcoholWaterFilter") Mode 1
 sbn LED HASH("AlcoholStatusLED") Color 2 # green
 j ra
 
 FILTEROFF:
-sbn FiltrationLiq HASH("AlcoholWaterFilter") On 0
+sbn FiltrationLiq HASH("AlcoholWaterFilter") On 1
+sbn FiltrationLiq HASH("AlcoholWaterFilter") Mode 0
 sbn LED HASH("AlcoholStatusLED") Color 6 # white
 j ra
 
@@ -103,11 +107,13 @@ j ra
 
 PURGEFILTERON:
 sbn Filter HASH("PureAlcoholPurgeN2Filter") On 1
+sbn Filter HASH("PureAlcoholPurgeN2Filter") Mode 1
 sbn LED HASH("AlcoholStatusLED") Color 2 # green
 j ra
 
 PURGEFILTEROFF:
-sbn Filter HASH("PureAlcoholPurgeN2Filter") On 0
+sbn Filter HASH("PureAlcoholPurgeN2Filter") On 1
+sbn Filter HASH("PureAlcoholPurgeN2Filter") Mode 0
 sbn LED HASH("AlcoholStatusLED") Color 6 # white
 j ra
 
