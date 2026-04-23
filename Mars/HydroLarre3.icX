@@ -42,7 +42,6 @@ yield
 lbns PlantQty HydroLarre HASH("HydroLarre3") TargetSlot Quantity 0
 yield
 beqzal PlantQty PLANT
-
 j MAIN
 
 GETTARGET:

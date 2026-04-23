@@ -1,0 +1,76 @@
+# Turns Alcohol to Water Combustion on and off
+# depending on conditions
+# Works together with AlcoholToWater.icX
+# which controls O2+Alcohol Mixing
+
+define Filtration     -348054045
+define LED             1944485013
+define TVP             1310794736
+define PA              435685051
+define Combustor       1840108251
+
+alias FilterPressDiff r3
+
+MAIN:
+yield
+# first check filter availability
+# shut it all off when filter is not available
+lbns r10 Filtration HASH("AlcoholToWaterFiltration") 0 Quantity Minimum 
+lbns r11 Filtration HASH("AlcoholToWaterFiltration") 1 Quantity Minimum 
+min r10 r10 r11
+bltal r10 1 FILTERWARNING
+
+# check for overpressure from TVP
+lbn r0 PA HASH("AlcoholToWaterPostTVPPA") Pressure 0
+bgt r0 15000 SHUTOFF
+
+# don't let pre and postfilter pressure get too high
+lbn r0 Filtration HASH("AlcoholToWaterFiltration") PressureInput 0
+lbn r1 Filtration HASH("AlcoholToWaterFiltration") PressureOutput 0
+sub FilterPressDiff r0 r1
+bgtal FilterPressDiff 5000 FILTERON
+bltal FilterPressDiff 3000 FILTEROFF
+
+bgt r0 35000 SHUTOFF
+bgt r1 20000 SHUTOFF
+
+# Start processing when everything seems ok...
+j START
+j MAIN
+
+SHUTOFF:
+sbn Combustor HASH("AlcoholToWaterO2Combustor") Activate 0
+yield
+yield
+sbn TVP HASH("AlcoholToWaterExhaustTVP") On 0
+sbn LED HASH("AlcoholToWaterCombustionLED") On 1
+sbn LED HASH("AlcoholToWaterCombustionLED") Color 6 #white
+sleep 30
+j MAIN
+
+START:
+sbn TVP HASH("AlcoholToWaterExhaustTVP") On 1
+sbn Combustor HASH("AlcoholToWaterO2Combustor") On 1
+sbn Combustor HASH("AlcoholToWaterO2Combustor") Activate 1
+sbn LED HASH("AlcoholToWaterCombustionLED") On 1
+sbn LED HASH("AlcoholToWaterCombustionLED") Color 2 #green
+j MAIN
+
+FILTERON:
+sbn Filtration HASH("AlcoholToWaterFiltration") On 1
+sbn Filtration HASH("AlcoholToWaterFiltration") Mode 1
+sbn LED HASH("AlcoholToWaterCombustionLED") On 1
+sbn LED HASH("AlcoholToWaterCombustionLED") Color 2 #Green
+j ra
+
+FILTEROFF:
+sbn Filtration HASH("AlcoholToWaterFiltration") On 1
+sbn Filtration HASH("AlcoholToWaterFiltration") Mode 0
+sbn LED HASH("AlcoholToWaterCombustionLED") On 1
+sbn LED HASH("AlcoholToWaterCombustionLED") Color 6 #White
+j ra
+
+FILTERWARNING:
+sbn LED HASH("AlcoholToWaterCombustionLED") On 1
+sbn LED HASH("AlcoholToWaterCombustionLED") Color 4 #red
+j SHUTOFF

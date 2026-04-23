@@ -21,6 +21,10 @@ sbn LED HASH("AlcoholFilterLED") Color 2 # green
 sbn Fermenter HASH("Fermenter1") On 1
 sbn Fermenter HASH("Fermenter2") On 1
 
+lbn r12 LiquidPipePA HASH("PureAlcoholLiqPA") VolumeOfLiquid 0
+sbn LEDDisplayS HASH("AlcoholQuantityLEDDisplay") Mode 12
+sbn LEDDisplayS HASH("AlcoholQuantityLEDDisplay") Setting r12
+
 # Filtration Filter Status
 lbns r10 FiltrationLiq HASH("AlcoholWaterFilter") 0 Quantity Minimum
 lbns r11 FiltrationLiq HASH("AlcoholWaterFilter") 1 Quantity Minimum

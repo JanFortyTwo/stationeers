@@ -1,0 +1,89 @@
+#Alcohol Fuel Mixer Credit: Shadowdrake082
+alias AnalFuel d0
+alias AnalO2 d1
+alias PumpO2 d2
+alias AnalAl d3
+alias PumpAl d4
+
+alias POOn r15
+alias POSet r14
+alias PAOn r13
+alias PASet r12
+alias nTarAl r11
+alias nTarO2 r10
+alias molAl r9
+alias molO r8
+alias DLa r7 #Density of liquid alcohol
+
+define PMin 250 #250kpa handles up to 85C O2
+#define VTarget 0.01 #Remember, 1% is 50% pipe stress
+define VTarget 0.003 #Remember, 1% is 50% pipe stress
+define DA 17.2 #liquid density of alcohol
+define DPw 55.6 #liquid density of polluted water
+define OReaction 3 #set to 3 for oxygen, 2 for ozone
+Initialize:
+s AnalO2 On 1
+s AnalAl On 1
+s AnalFuel On 1
+main:
+l r0 AnalO2 On
+beqz r0 Initialize
+l r0 AnalFuel On
+beqz r0 Initialize
+l r0 AnalAl On
+beqz r0 Initialize
+
+jal LDaCalculate
+
+l r0 AnalFuel Volume
+mul r0 r0 VTarget
+mul nTarAl r0 DA
+
+#Alcohol calculations
+l r0 AnalFuel TotalMoles
+l r1 AnalFuel RatioLiquidAlcohol
+l r2 AnalFuel RatioOxygen
+mul molAl r1 r0 #Total mols of alcohol
+mul molO r2 r0
+div r5 molO molAl
+s db Setting r5
+
+mul r2 nTarAl OReaction #remember, 3 O2 per 1 Alcohol, 2 Ozone per 1 Alcohol
+mul r1 molAl OReaction
+max nTarO2 r2 r1 #Selects target of O2 based on whichever is higher
+
+sub r0 nTarO2 molO #gets n needed
+l r1 AnalO2 Pressure
+l r2 AnalO2 Temperature
+
+mul POSet r0 rgas
+mul POSet POSet r2
+div POSet POSet r1
+sgtz POOn POSet
+
+sub r0 nTarAl molAl
+div PASet r0 DLa #calculates liters of alcohol needed
+min PASet 1 PASet #selects minimum l volume pump to make sure not too much liquids pumped
+sgtz r0 PASet
+l r1 AnalFuel Pressure
+sgt r1 r1 PMin
+l r2 AnalAl VolumeOfLiquid
+sgt r2 r2 5 #minimum 5 L of liquids
+and r1 r1 r2
+and PAOn r0 r1
+end:
+#s db Setting DLa
+s PumpO2 Setting POSet
+s PumpO2 On POOn
+s PumpAl Setting PASet
+s PumpAl On PAOn
+yield
+j main
+
+LDaCalculate:
+l r0 AnalAl RatioLiquidAlcohol
+l r1 AnalAl RatioPollutedWater
+add r2 r0 r1 #calculates total ratio for liquids
+div r0 r0 r2 #calculates partial ratio for liquid alcohol
+mul DLa r0 DA
+j ra

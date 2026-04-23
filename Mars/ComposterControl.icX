@@ -5,7 +5,6 @@ alias Switch       d4
 alias AVtoFilter   d5
 
 alias OnOff        r0
-alias MetRatio     r1
 alias HydRatio     r2
 alias Press        r3
 
@@ -19,7 +18,6 @@ define DisplaySmall  -815193061
 
 MAIN:
 yield
-l MetRatio GS RatioMethane
 l Press GS Pressure
 l OnOff Switch Open
 s Composter On       1
@@ -31,21 +29,18 @@ lbn r9 Centrifuge HASH("ArcFurnace1Centrifuge2") Reagents 0
 sbn DisplaySmall HASH("ArcFurnace1Centrifuge2Display") Setting r9
 lbn r9 Centrifuge HASH("ArcFurnace1Centrifuge3") Reagents 0
 sbn DisplaySmall HASH("ArcFurnace1Centrifuge3Display") Setting r9
-
+lbn r9 Centrifuge HASH("ArcFurnace1Centrifuge4") Reagents 0
+sbn DisplaySmall HASH("ArcFurnace1Centrifuge4Display") Setting r9
 sbn Stacker HASH("ArcFurnace1Stacker") On 1
 sbn Stacker HASH("ArcFurnace1Stacker") Setting 50
-
 lbns OnOff Recycler HASH("ArcFurnace1Recycler") 0 Occupied 0
 sbn Recycler HASH("ArcFurnace1Recycler") On OnOff
-
 lbn OnOff Recycler HASH("ArcFurnace1Recycler") Reagents 0
 sgtz OnOff OnOff
 sbn Recycler HASH("ArcFurnace1Recycler") On OnOff
-
 lbns OnOff ArcFurnace HASH("ArcFurnace1") 0 Occupied 0
 s db Setting OnOff
 sbn ArcFurnace HASH("ArcFurnace1") Activate OnOff
-
 lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge1") 0 Occupied 0
 #sbn Centrifuge HASH("ArcFurnace1Centrifuge") On
 lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge1") Reagents 0
@@ -63,32 +58,30 @@ lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge3") 0 Occupied 0
 lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge3") Reagents 0
 bgtal r11 99 Empty3
 bltal r11 1 Close3
-
+lbns OnOff Centrifuge HASH("ArcFurnace1Centrifuge4") 0 Occupied 0
+#sbn Centrifuge HASH("ArcFurnace1Centrifuge") On
+lbn r11 Centrifuge HASH("ArcFurnace1Centrifuge4") Reagents 0
+bgtal r11 99 Empty4
+bltal r11 1 Close4
 bltal Press 100 VENTOFF
 bltal Press 50  FILTERVENTOFF
 bgtal Press 130 FILTERVENTON
 bltal Press 80  FILTERVENTOFF
-
 bgt Press    185 VENTON
 j MAIN
-
 FILTERVENTON:
 s AVtoFilter Mode 1
 s AVtoFilter On 1
 j ra
-
 FILTERVENTOFF:
 s AVtoFilter On 0
 j ra
-
 VENTON:
 s AV On 1
 j MAIN
-
 VENTOFF:
 s AV On 0
 j ra
-
 Empty1:
 sbn Centrifuge HASH("ArcFurnace1Centrifuge1") On 0
 sbn Centrifuge HASH("ArcFurnace1Centrifuge1") Open 1
@@ -117,5 +110,15 @@ j ra
 Close3:
 sbn Centrifuge HASH("ArcFurnace1Centrifuge3") Open 0
 sbn Centrifuge HASH("ArcFurnace1Centrifuge3") On 1
+sleep 2
+j ra
+Empty4:
+sbn Centrifuge HASH("ArcFurnace1Centrifuge4") On 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge4") Open 1
+sleep 2
+j ra
+Close4:
+sbn Centrifuge HASH("ArcFurnace1Centrifuge4") Open 0
+sbn Centrifuge HASH("ArcFurnace1Centrifuge4") On 1
 sleep 2
 j ra

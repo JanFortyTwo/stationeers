@@ -1,6 +1,7 @@
 alias CoolingValve d0
 alias H20Tank      d1
 alias StatusLED    d2
+alias Heater       d3
 
 alias OnOff        r0
 alias Temp         r1
@@ -12,6 +13,8 @@ yield
 l Temp H20Tank Temperature
 bgtal Temp 295 COOLINGOPEN
 bltal Temp 293 COOLINGCLOSED
+bltal Temp 285 HEATINGON
+bgtal Temp 290 HEATINGOFF
 
 #l r3 H20Tank VolumeOfLiquid
 #bltal r3 100 WARNING
@@ -37,6 +40,16 @@ j ra
 
 COOLINGCLOSED:
 s CoolingValve On 0
+s StatusLED Color 6
+j ra
+
+HEATINGON:
+s Heater On 1
+s StatusLED Color 5
+j ra
+
+HEATINGOFF:
+s Heater On 0
 s StatusLED Color 6
 j ra
 
