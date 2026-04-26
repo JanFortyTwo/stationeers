@@ -55,7 +55,8 @@ s CO2AV     On    OnOff
 
 min RatioVola RatioVola RatioPollu
 sgt OnOff RatioVola .00001
-s ToxicsFilter On OnOff
+s ToxicsFilter On 1
+s ToxicsFilter Mode OnOff
 sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
 sbn LED HASH("ToxicsLight") Color 4
 sbn LED HASH("ToxicsLight") On OnOff
@@ -81,7 +82,8 @@ sbn ActiveVent HASH("Greenhouse-To-Tank-AV") On OnOff
 s db Setting OnOff
 
 sgt OnOff RatioO2Inside 0.31
-sbn Filtration HASH("Greenhouse-O2-Filter") On OnOff
+sbn Filtration HASH("Greenhouse-O2-Filter") On 1
+sbn Filtration HASH("Greenhouse-O2-Filter") Mode OnOff
 
 slt OnOff TankNitrogenRatio 0.05
 sbn TurboPump HASH("Nitrogen-To-GreenhouseTank-TVP") On OnOff

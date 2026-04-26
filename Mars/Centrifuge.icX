@@ -6,25 +6,30 @@ define DeepMiner       265720906
 
 MAIN:
 yield
-lbn r0 DaylightSensor HASH("Mining Daylight Sensor") Vertical 0
+#lbn r0 DaylightSensor HASH("Mining Daylight Sensor") Vertical 0
 #sgt r0 r0 87 for day only
-sgt r0 r0 70 # all day
-sb DeepMiner On r0
+#sgt r0 r0 70 # all day
+#sb DeepMiner On r0
 lbn r1 Centr HASH("Centrifuge 1") Reagents 2
 lbn r2 Centr HASH("Centrifuge 2") Reagents 2
 lbn r3 Centr HASH("Centrifuge 3") Reagents 2
 lbn r4 Centr HASH("Centrifuge 4") Reagents 2
+lbn r5 Centr HASH("Centrifuge 5") Reagents 2
 max r13 r1 r2
 max r13 r13 r3
+max r13 r13 r4
+max r13 r13 r5
 s db Setting r0
 bgt r1 399 Empty1
 bgt r2 399 Empty2
 bgt r3 399 Empty3
 bgt r4 399 Empty4
+bgt r5 399 Empty5
 blt r1 3 Close1
 blt r2 3 Close2
 blt r3 3 Close3
 blt r4 3 Close4
+blt r5 3 Close5
 j MAIN
 
 Empty1:
@@ -55,6 +60,13 @@ s db Setting 888
 sleep 2
 j MAIN
 
+Empty5:
+sbn Centr HASH("Centrifuge 5") On 0
+sbn Centr HASH("Centrifuge 5") Open 1
+s db Setting 555
+sleep 2
+j MAIN
+
 Close1:
 sbn Centr HASH("Centrifuge 1") Open 0
 sbn Centr HASH("Centrifuge 1") On 1
@@ -80,5 +92,12 @@ Close4:
 sbn Centr HASH("Centrifuge 4") Open 0
 sbn Centr HASH("Centrifuge 4") On 1
 s db Setting 777
+sleep 2
+j MAIN
+
+Close5:
+sbn Centr HASH("Centrifuge 5") Open 0
+sbn Centr HASH("Centrifuge 5") On 1
+s db Setting 505
 sleep 2
 j MAIN

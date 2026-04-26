@@ -47,8 +47,10 @@ bgt r12 145 MAIN
 blt r12  24 MAIN
 
 #otherwise, dump 1 stack of coal
-s CharCoalSilo Open 1
+s CoalSilo Open 1
+#s CharCoalSilo Open 1
 yield
-s CharCoalSilo Open 0
+s CoalSilo Open 0
+#s CharCoalSilo Open 0
 sleep 5
 j MAIN
