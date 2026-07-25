@@ -15,21 +15,25 @@ lbn r2 Centr HASH("Centrifuge 2") Reagents 2
 lbn r3 Centr HASH("Centrifuge 3") Reagents 2
 lbn r4 Centr HASH("Centrifuge 4") Reagents 2
 lbn r5 Centr HASH("Centrifuge 5") Reagents 2
+lbn r6 Centr HASH("Centrifuge 6") Reagents 2
 max r13 r1 r2
 max r13 r13 r3
 max r13 r13 r4
 max r13 r13 r5
+max r13 r13 r6
 s db Setting r0
 bgt r1 399 Empty1
 bgt r2 399 Empty2
 bgt r3 399 Empty3
 bgt r4 399 Empty4
 bgt r5 399 Empty5
+bgt r6 399 Empty6
 blt r1 3 Close1
 blt r2 3 Close2
 blt r3 3 Close3
 blt r4 3 Close4
 blt r5 3 Close5
+blt r6 3 Close6
 j MAIN
 
 Empty1:
@@ -67,6 +71,13 @@ s db Setting 555
 sleep 2
 j MAIN
 
+Empty6:
+sbn Centr HASH("Centrifuge 6") On 0
+sbn Centr HASH("Centrifuge 6") Open 1
+s db Setting 600
+sleep 2
+j MAIN
+
 Close1:
 sbn Centr HASH("Centrifuge 1") Open 0
 sbn Centr HASH("Centrifuge 1") On 1
@@ -99,5 +110,12 @@ Close5:
 sbn Centr HASH("Centrifuge 5") Open 0
 sbn Centr HASH("Centrifuge 5") On 1
 s db Setting 505
+sleep 2
+j MAIN
+
+Close6:
+sbn Centr HASH("Centrifuge 6") Open 0
+sbn Centr HASH("Centrifuge 6") On 1
+s db Setting 606
 sleep 2
 j MAIN

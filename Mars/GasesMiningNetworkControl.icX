@@ -24,10 +24,12 @@ sbn LED HASH("FiltrationFilterLED") Color OnOff
 # Water 
 lbn r10 LiqTankBig HASH("H2O Main Tank") Temperature 0
 sbn LEDDisplayS HASH("MainWaterTempLedDisplay") Setting r10
+sbn LEDDisplayS HASH("MainWaterTempLedDisplay") Mode 3 # 3 = Kelvin
 bgtal r10 300 H2OWARNING
 bltal r10 260 H2OWARNING
 lbn r11 LiqTankBig HASH("H2O Main Tank") VolumeOfLiquid 0
 sbn LEDDisplayS HASH("MainWaterQtyLedDisplay") Setting r11
+sbn LEDDisplayS HASH("MainWaterQtyLedDisplay") Mode 12 # 12 = liters
 bltal r11 100 H2OWARNING
 lbn r9  LiqTankBig HASH("H2O Main Tank") RatioNitrousOxide 0
 bgtzal r9 H2OERROR

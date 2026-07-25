@@ -5,6 +5,8 @@ define Filter     -348054045
 define AV         -1129453144
 define PA         435685051
 define LPA        -2113838091
+define Condenser   1420719315
+define AC         -2087593337
 
 alias AmbientTemp      r1
 alias TankPress        r2
@@ -17,16 +19,28 @@ sbn Filter HASH("N2LiquidizerFilter") On 1
 lbn r9 LPA HASH("N2 Liquidizer Liquid PA") VolumeOfLiquid 0
 slt r9 r9 500
 
+lbn r8 LPA HASH("N2 Liquidizer Liquid PA") VolumeOfLiquid 0
+sgt r8 r8 118 # -155 Celsius
+
+sbn AC HASH("N2LiquidCoolingAC1") Mode r8
+sbn AC HASH("N2LiquidCoolingAC2") Mode r8
+sbn AC HASH("N2LiquidCoolingAC3") Mode r8
+
 # CO2 Filtration
 lbn r10 Filter HASH("N2LiquidizerFilter") PressureInput 0
 lbn r11 PA HASH("N2LiquidizerGasPA") Pressure 0
+
+sbn Condenser HASH("N2 Liquidizer Condenser") On r9
+sbn AC HASH("N2CondenserAirConditioner") On r9
+sbn AC HASH("N2CondenserAirConditioner") Mode r9
+
 s db Setting r11
 yield
 s db Setting r10
-sgt r10 r10 2000
-slt r11 r11 10000
+sgt r10 r10 13000
+slt r11 r11 2000
 and r11 r10 r11
-and r11 r11 r9 
+
 yield
 s db Setting r11
 #bgtz r11 N2FILTERON

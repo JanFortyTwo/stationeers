@@ -1,3 +1,0 @@
-MAIN:
-sleep 5
-j MAIN

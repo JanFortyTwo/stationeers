@@ -15,9 +15,10 @@ alias molAl r9
 alias molO r8
 alias DLa r7 #Density of liquid alcohol
 
-define PMin 250 #250kpa handles up to 85C O2
+#define PMin 250 #250kpa handles up to 85C O2
+define PMin 100 #250kpa handles up to 85C O2
 #define VTarget 0.01 #Remember, 1% is 50% pipe stress
-define VTarget 0.003 #Remember, 1% is 50% pipe stress
+define VTarget 0.002 #Remember, 1% is 50% pipe stress
 define DA 17.2 #liquid density of alcohol
 define DPw 55.6 #liquid density of polluted water
 define OReaction 3 #set to 3 for oxygen, 2 for ozone

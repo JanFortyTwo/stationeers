@@ -27,6 +27,11 @@ sbn LEDDisplayS HASH("LEDDisplayFe") Setting r0
 bgtal r0 520 MinerFeCuSiOff
 bltal r0 500 MinerFeCuSiOn
 
+lbn r0 Silo HASH("SiloNi") Quantity 1
+sbn LEDDisplayS HASH("LEDDisplayNi") Setting r0
+bgtal r0 520 MinerAgNiPbOff
+bltal r0 500 MinerAgNiPbOn
+
 lbn r1 Silo HASH("SiloCu") Quantity 1
 sbn LEDDisplayS HASH("LEDDisplayCu") Setting r1
 
@@ -36,9 +41,6 @@ sbn LEDDisplayS HASH("LEDDisplaySi") Setting r2
 
 lbn r0 Silo HASH("SiloAg") Quantity 1
 sbn LEDDisplayS HASH("LEDDisplayAg") Setting r0
-
-lbn r0 Silo HASH("SiloNi") Quantity 1
-sbn LEDDisplayS HASH("LEDDisplayNi") Setting r0
 
 lbn r0 Silo HASH("SiloCo") Quantity 1
 sbn LEDDisplayS HASH("LEDDisplayCo") Setting r0
@@ -53,7 +55,6 @@ sbn Miner HASH("DeepMinerPb") On 0
 sbn LED HASH("LEDPbMiner") On 0
 sbn LED HASH("LEDPbMiner") Color 2
 j ra
-
 MinerPbOn:
 sbn Miner HASH("DeepMinerPb") On 1
 sbn LED HASH("LEDPbMiner") On 1
@@ -65,7 +66,6 @@ sbn Miner HASH("DeepMinerFeCuSi") On 0
 sbn LED HASH("LEDFeCuSiMiner") On 0
 sbn LED HASH("LEDFeCuSiMiner") Color 2
 j ra
-
 MinerFeCuSiOn:
 sbn Miner HASH("DeepMinerFeCuSi") On 1
 sbn LED HASH("LEDFeCuSiMiner") On 1
@@ -77,7 +77,6 @@ sbn Miner HASH("DeepMinerAu") On 0
 sbn LED HASH("LEDAuMiner") On 0
 sbn LED HASH("LEDAuMiner") Color 2
 j ra
-
 MinerAuOn:
 sbn Miner HASH("DeepMinerAu") On 1
 sbn LED HASH("LEDAuMiner") On 1
@@ -89,9 +88,19 @@ sbn Miner HASH("DeepMinerHydroCarbon") On 0
 sbn LED HASH("LEDHydroCarbonMiner") On 0
 sbn LED HASH("LEDHydroCarbonMiner") Color 2
 j ra
-
 MinerHydroCarbonOn:
 sbn Miner HASH("DeepMinerHydroCarbon") On 1
 sbn LED HASH("LEDHydroCarbonMiner") On 1
 sbn LED HASH("LEDHydroCarbonMiner") Color 2
+j ra
+
+MinerAgNiPbOff:
+sbn Miner HASH("DeepMinerAgNiPb") On 0
+sbn LED HASH("LEDAgNiPbMiner") On 0
+sbn LED HASH("LEDAgNiPbMiner") Color 2
+j ra
+MinerAgNiPbOn:
+sbn Miner HASH("DeepMinerAgNiPb") On 1
+sbn LED HASH("LEDAgNiPbMiner") On 1
+sbn LED HASH("LEDAgNiPbMiner") Color 2
 j ra

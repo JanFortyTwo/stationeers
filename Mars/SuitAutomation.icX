@@ -52,6 +52,6 @@ j ra
 HELMETCLOSE:
 s Suit AirRelease 1
 #s Suit On 0
-slt OnOff OxygenRatio 0.8
+slt OnOff OxygenRatio 0.75
 s Suit Filtration OnOff
 j ra
