@@ -50,8 +50,8 @@ sbn LED HASH("AlcoholFilterLED") Color OnOff
 lbn r10 LiquidPipePA HASH("AlcoholLiquidPipePA") VolumeOfLiquid 0
 #bgtal r10 100  FILTERON
 #temp keep alcohol pw combo
-bgtal r10 200  FILTERON
-bltal r10 50   FILTEROFF
+bgtal r10 2000  FILTERON
+bltal r10 1000  FILTEROFF
 
 lbn r10 Filter HASH("PureAlcoholPurgeN2Filter") PressureInput 0
 bgtal r10 2500 PURGEFILTERON
