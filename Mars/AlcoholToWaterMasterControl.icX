@@ -22,8 +22,10 @@ bltal r10 1 FILTERWARNING
 lbn r0 Filtration HASH("AlcoholToWaterFiltration") PressureInput 0
 lbn r1 Filtration HASH("AlcoholToWaterFiltration") PressureOutput 0
 sub FilterPressDiff r0 r1
-bgtal FilterPressDiff 1500 FILTERON
-bltal FilterPressDiff 1000 FILTEROFF
+bgtal FilterPressDiff 8000 FILTERON
+bltal FilterPressDiff 2000 FILTEROFF
+bgt r0 35000 SHUTOFF 
+bgt r1 5000 SHUTOFF
 
 # check for overpressure from TVP
 lbn r0 PA HASH("AlcoholToWaterPostTVPPA") Pressure 0
@@ -36,8 +38,6 @@ blt r0 700 SHUTOFF
 lbn r0 PA HASH("O2MainPA") Pressure 0
 blt r0 4000 SHUTOFF
 
-bgt r0 35000 SHUTOFF
-bgt r1 5000 SHUTOFF
 
 # Start processing when everything seems ok...
 j START
