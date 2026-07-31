@@ -17,7 +17,7 @@ yield
 sbn Filter HASH("N2LiquidizerFilter") On 1
 
 lbn r9 LPA HASH("N2 Liquidizer Liquid PA") VolumeOfLiquid 0
-slt r9 r9 500
+slt r9 r9 5000
 
 lbn r8 LPA HASH("N2 Liquidizer Liquid PA") VolumeOfLiquid 0
 sgt r8 r8 118 # -155 Celsius
