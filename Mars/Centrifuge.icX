@@ -7,6 +7,7 @@ define Stacker        -2020231820
 define Dial            554524804
 define DaylightSensor  1076425094
 define DeepMiner       265720906
+define LEDDisplayS    -815193061
 
 yield
 #lbn r0 DaylightSensor HASH("Mining Daylight Sensor") Vertical 0
@@ -28,24 +29,36 @@ move sp 0
 
 loop_start:
 yield
+yield
 add sp sp 1
 lbn r0 Centr r1 Reagents 3
+lbns r5 Centr r1 0 Occupied 3
+#max r5 r5  r0
 s db Setting r0
+sbn LEDDisplayS HASH("DisplayCentrifugeMax") Setting r0
 bgtal r0 399 Empty1
-bltal r0 3 Close1
+bltal r0 2 Close1
+beqzal r5 Empty1
+bgtzal r5 Startup1
 peek r1
 beqz r1 reset
 j loop_start
 
 Empty1:
 sbn Centr r1 On 0
-sbn Centr r1 Open 0
+sbn Centr r1 Open 1
 j ra
 
 Close1:
 sbn Centr r1 Open 0
+#sbn Centr r1 On 1
+j ra
+
+Shutoff1:
+sbn Centr r1 On 0
+j ra
+
+Startup1:
 sbn Centr r1 On 1
-peek r1
-beqz r1 reset
-sleep 2
-j loop_start
+j Close1
+
